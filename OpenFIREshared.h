@@ -1,9 +1,8 @@
 /*!
-* @file  OpenFIREshared.h
-* @brief Shared board assets for use between OpenFIRE microcontroller clients
-*        and configuration apps for the OpenFIRE platform.
+* @file OpenFIREshared.h
+* @brief Shared board assets.
 *
-* @copyright That One Seong, 2025
+* @copyright That One Seong, 2024
 *
 *  OpenFIREshared is free software: you can redistribute it and/or modify
 *  it under the terms of the GNU General Public License as published by
@@ -25,6 +24,11 @@
 #include <cstdint>
 #include <string>
 #include <unordered_map>
+
+// just to detect we're using Qt, and thus building Desktop App and not FW
+#ifdef QT_GUI_LIB
+#include <QMultiMap>
+#endif
 
 //// BOARD IDENTIFIERS (for Desktop App identification and determining presets)
 
@@ -89,7 +93,6 @@ public:
         analogX,
         analogY,
         tempPin,
-        // Add here
         boardInputsCount
     } boardInputs_e;
 
@@ -104,7 +107,6 @@ public:
         commonAnode,
         lowButtonsMode,
         rumbleFF,
-        // Add here
         boolTypesCount
     } boolTypes_e;
 
@@ -122,114 +124,14 @@ public:
         customLEDcolor1,
         customLEDcolor2,
         customLEDcolor3,
-        // Add here
         settingsTypesCount
     } settingsTypes_e;
 
     // Layout types
     enum {
         layoutSquare = 0,
-        layoutDiamond,
-        // Add here
-        layoutTypes
+        layoutDiamond
     } layoutTypes_e;
-
-    // Peripheral types
-    enum {
-        i2cOLED = 0,
-        // Add here
-        i2cDevicesCount,
-        i2cDevicesEnabled = 0xFE,
-
-        //// setting types for devices
-        // For OLED:
-        oledAltAddr = 0,
-        oledSettingsTypes,
-    } i2cPeriphTypes_e;
-
-    /* ////
-     * Shared serial control/signal codes for both boards and app.
-     * For purposes of app-side debugability: ASCII 33-127 (visible characters)
-     * should be for the board to send, and invisible characters/control codes should
-     * be for the app to send.
-     */////
-    enum {
-        // Docking commands
-        sDock1 = 1,
-        sDock2,
-
-        // Mode toggles from app
-        sIRTest = 5,
-        sCaliProfile,
-        sCaliStart,
-        sCaliSens,
-        sCaliLayout,
-
-        // Test signals from app
-        sTestSolenoid = 20,
-        sTestRumble,
-        sTestLEDR,
-        sTestLEDG,
-        sTestLEDB,
-
-        // Status updates from board
-        sBtnPressed = 33,
-        sBtnReleased,
-        sAnalogPosUpd,
-        sTemperatureUpd,
-        sCaliStageUpd,
-        sCaliInfoUpd,
-        sTestCoords,
-        sCurrentProf,
-        sError,
-
-        // Error types from board (with sError)
-        sErrCam = 100,
-        sErrPeriphGeneric,
-
-        // Push settings to board
-        sCommitStart = 130,
-        sCommitToggles,
-        sCommitPins,
-        sCommitSettings,
-        sCommitProfile,
-        sCommitID,
-        sCommitPeriphs,
-
-        // Grab settings from board
-        sGetPins = 150,
-        sGetToggles,
-        sGetSettings,
-        sGetProfile,
-        sGetPeriphs,
-
-        sSave = 0xFD,
-        sClearFlash = 0xFE,
-        // Terminates out of any current mode, or undocks
-        serialTerminator = 0xFF
-    } serialCmdTypes_e;
-
-    enum {
-        profTopOffset = 0,
-        profBottomOffset,
-        profLeftOffset,
-        profRightOffset,
-        profTLled,
-        profTRled,
-        profAdjX,
-        profAdjY,
-        profIrSens,
-        profRunMode,
-        profIrLayout,
-        profColor,
-        profDataTypes,
-        profName = 0xFA,
-    } profSyncTypes_e;
-
-    enum {
-        usbPID = 0,
-        usbName,
-    } usbIdSyncTypes_e;
 
     typedef struct {
         int8_t pin[50]; // 30]; modificato da me 696969 per gestire ESP32S3 necessitano 48 pin per rp2040 ne bastavano 30 .. l'esp32 espone 48 pin da 1 in avanti .. arrotondato a 50
@@ -328,10 +230,10 @@ public:
     };
 
 // Only needed for the Desktop App, don't build for microcontroller firmware!
-#ifdef OF_APP
+#ifdef QT_VERSION
 
     // Used by pinBoxes, matching boardInputs_e (except "unavailable")
-    inline static const char* valuesNameList[] = {
+    inline static const QStringList valuesNameList = {
         "Unmapped",
         "Trigger",
         "Button A",
@@ -360,13 +262,13 @@ public:
         "Camera SCL",
         "Peripherals SDA",
         "Peripherals SCL",
-        "Battery Sensor (Unused)",
-        "Analog Stick X",
-        "Analog Stick Y",
+        "Battery Sensor",
+        "Analog Pin X",
+        "Analog Pin Y",
         "Temp Sensor"
     };
 
-    inline static const std::unordered_map<std::string, const char *> boardNames = {
+    inline static const QMap<std::string, const char *> boardNames = {
         {"rpipico",             "Raspberry Pi Pico (RP2040)"},
         {"rpipicow",            "Raspberry Pi Pico W (RP2040)"},
         {"adafruitItsyRP2040",  "Adafruit ItsyBitsy RP2040"},
@@ -396,7 +298,7 @@ public:
     ///             Unexposed pins should use only posNothing (0).
     ///             (Yep, bitpacking! Three most significant bits determine left/right/under position)
     ///             (If anyone is aware of a better way of doing this, please let me know/send a PR!)
-    inline static const std::unordered_map<std::string, boardBoxPosMap_t> boardsBoxPositions = {
+    inline static const QMap<std::string, boardBoxPosMap_t> boardsBoxPositions = {
         //=====================================================================================================
         // Raspberry Pi Pico: 15 pins left, rest of the pins right. Mostly linear order save for the reserved pins.
         // Notes: rpi boards do not expose pins 23-25; pin 29/A3 is used for builtin chipset temp monitor
@@ -519,7 +421,7 @@ public:
 
     /// @brief      MultiMap of alternative pin mappings for supported boards to show in the application.
     /// @details    Key = board (one board can be multiple), string literal label, int array maps to RP2040 GPIO where each value is a FW function (or unmapped).
-    inline static const std::unordered_multimap<std::string, boardAltPresetsMap_t> boardsAltPresets = {
+    inline static const QMultiMap<std::string, boardAltPresetsMap_t> boardsAltPresets = {
         //=====================================================================================================
         // Raspberry Pi Pico Presets (currently a test)
         // Notes: rpi boards do not expose pins 23-25; pin 29/A3 is used for builtin chipset temp monitor
