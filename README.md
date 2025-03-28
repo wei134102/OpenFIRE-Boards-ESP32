@@ -1,4 +1,4 @@
-## fork OpenFIRE-firmware for EPS32
+## fork OpenFIRE-Boards for EPS32
 
 Questo repository è un fork del progetto originale 'OpenFIRE-Boards' del TeamOpenFIRE, adattato per funzionare sul microcontrollore ESP32S3.
 Salvo alcuni adattamenti e piccole modifiche, il codice rimane sostanzialmente fedele all'originale del TeamOpenFIRE.
