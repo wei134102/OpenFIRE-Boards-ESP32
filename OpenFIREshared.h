@@ -90,6 +90,7 @@ public:
         analogX,
         analogY,
         tempPin,
+        wiiClockGen,
         // Add here
         boardInputsCount
     } boardInputs_e;
@@ -105,6 +106,7 @@ public:
         commonAnode,
         lowButtonsMode,
         rumbleFF,
+        invertStaticPixels,
         // Add here
         boolTypesCount
     } boolTypes_e;
@@ -240,7 +242,7 @@ public:
         {"rpipico",             {   btnGunA,       btnGunB,        btnGunC,        btnStart,       btnSelect,
                                     btnHome,       btnGunUp,       btnGunDown,     btnGunLeft,     btnGunRight,
                                     ledR,          ledG,           ledB,           btnPump,        btnPedal,
-                                    btnTrigger,    solenoidPin,    rumblePin,      btnUnmapped,    btnUnmapped,
+                                    btnTrigger,    solenoidPin,    rumblePin,      periphSDA,      periphSCL,
                                     camSDA,        camSCL,         btnUnmapped,    unavailable,    unavailable,
                                     unavailable,   btnUnmapped,    btnUnmapped,    tempPin,        unavailable}},
         //=====================================================================================================
@@ -336,7 +338,8 @@ public:
         "Battery Sensor (Unused)",
         "Analog Stick X",
         "Analog Stick Y",
-        "Temp Sensor"
+        "Temp Sensor",
+        "Wii Cam Clock",
     };
 
     inline static const std::unordered_map<std::string, const char *> boardNames = {
