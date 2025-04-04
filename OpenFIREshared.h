@@ -43,7 +43,7 @@
     #define OPENFIRE_BOARD "rpipico"
 #elifdef ARDUINO_RASPBERRY_PI_PICO_W
     #define OPENFIRE_BOARD "rpipicow"
-#elif defined(ARDUINO_ESP32_S3_WROOM1_DevKitC_1_N16R8)  // 696969 aggiunto da me
+#elifdef ARDUINO_ESP32_S3_WROOM1_DevKitC_1_N16R8
     #define OPENFIRE_BOARD "esp32-s3-devkitc-1"
 #else
     #define OPENFIRE_BOARD "generic"
@@ -288,7 +288,7 @@ public:
                                     btnUnmapped,   btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
                                     btnUnmapped,   btnUnmapped,    btnUnmapped,    btnUnmapped,    tempPin}},
         //=====================================================================================================
-        // Notes: ESP32 // 696969 aggiunto da me  /*xx*/ indica il numero del GPIO es. /*02*/ per GPIO2
+        // Notes: ESP32          /*xx*/ indicates the number of the GPIO es. /*02*/ for GPIO2
         {"esp32-s3-devkitc-1",  {/*00*/unavailable,   /*01*/btnTrigger,     /*02*/btnGunRight,    /*03*/btnUnmapped,    /*04*/analogX,
                                  /*05*/analogY,       /*06*/tempPin,        /*07*/btnUnmapped,    /*08*/camSDA,         /*09*/camSCL,
                                  /*10*/btnUnmapped,   /*11*/btnUnmapped,    /*12*/btnUnmapped,    /*13*/btnUnmapped,    /*14*/btnUnmapped,
@@ -349,7 +349,7 @@ public:
         {"adafruitKB2040",      "Adafruit Keeboar KB2040"},
         {"arduinoNanoRP2040",   "Arduino Nano Connect RP2040"},
         {"waveshareZero",       "Waveshare Zero RP2040"},
-        {"esp32-s3-devkitc-1",  "Esp32-S3 Devkitc-1"},                   // 696969 aggiunto da me
+        {"esp32-s3-devkitc-1",  "Esp32-S3 Devkitc-1"},
         // Add more here!
         {"generic",             "Unknown Board"}
     };
@@ -432,7 +432,7 @@ public:
 
          //=====================================================================================================
         // Esp32 S3 Devkitc 1
-        // Notes: 696969 Esp32   /*xx*/ indica il numero del GPIO es. /*02*/ per GPIO2
+        // Notes: Esp32          /*xx*/ indicates the number of the GPIO es. /*02*/ for GPIO2
         {"esp32-s3-devkitc-1",  {/*00*/posNothing,    /*01*/19+posLeft,     /*02*/18+posLeft,     /*03*/posNothing,     /*04*/19+posRight,
                                  /*05*/18+posRight,   /*06*/17+posRight,    /*07*/posNothing,     /*08*/11+posRight,    /*09*/8+posRight,
                                  /*10*/posNothing,    /*11*/posNothing,     /*12*/posNothing,     /*13*/posNothing,     /*14*/posNothing,
