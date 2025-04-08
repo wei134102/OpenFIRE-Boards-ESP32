@@ -45,6 +45,8 @@
     #define OPENFIRE_BOARD "rpipicow"
 #elifdef ARDUINO_ESP32_S3_WROOM1_DevKitC_1_N16R8
     #define OPENFIRE_BOARD "esp32-s3-devkitc-1"
+#elifdef ARDUINO_WAVESHARE_ESP32_S3_PICO
+    #define OPENFIRE_BOARD "waveshare-esp32-s3-pico"
 #else
     #define OPENFIRE_BOARD "generic"
 #endif // board
@@ -154,9 +156,10 @@ public:
 
     /* ////
      * Shared serial control/signal codes for both boards and app.
-     * For purposes of app-side debugability: ASCII 33-127 (visible characters)
-     * should be for the board to send, and invisible characters/control codes should
-     * be for the app to send.
+     * For purposes of app-side debugability: ASCII 128+ should be for the board to send,
+     * and invisible ASCII characters/control codes 0-32 should be for the app to send.
+     *
+     * ASCII 33-127 should be avoided whenever possible.
      */////
     enum {
         // Docking commands
@@ -171,14 +174,18 @@ public:
         sCaliLayout,
 
         // Test signals from app
-        sTestSolenoid = 20,
+        sTestSolenoid = 15,
         sTestRumble,
         sTestLEDR,
         sTestLEDG,
         sTestLEDB,
 
+        // Error types from board (with sError)
+        sErrCam = 0x80, // 128
+        sErrPeriphGeneric,
+
         // Status updates from board
-        sBtnPressed = 33,
+        sBtnPressed = 0x90, // 144
         sBtnReleased,
         sAnalogPosUpd,
         sTemperatureUpd,
@@ -186,14 +193,9 @@ public:
         sCaliInfoUpd,
         sTestCoords,
         sCurrentProf,
-        sError,
-
-        // Error types from board (with sError)
-        sErrCam = 100,
-        sErrPeriphGeneric,
 
         // Push settings to board
-        sCommitStart = 130,
+        sCommitStart = 0xAA, // 170
         sCommitToggles,
         sCommitPins,
         sCommitSettings,
@@ -202,16 +204,17 @@ public:
         sCommitPeriphs,
 
         // Grab settings from board
-        sGetPins = 150,
+        sGetPins = 0xC8, // 200
         sGetToggles,
         sGetSettings,
         sGetProfile,
         sGetPeriphs,
 
-        sSave = 0xFC,
-        sClearFlash = 0xFD,
+        sError = 0xFA, // 250
+        sSave = 0xFC, // 252
+        sClearFlash = 0xFD, // 253
         // Terminates out of any current mode, or undocks
-        serialTerminator = 0xFE
+        serialTerminator = 0xFE // 254
     } serialCmdTypes_e;
 
     enum {
@@ -302,6 +305,18 @@ public:
                                  /*40*/btnGunUp,      /*41*/btnGunDown,     /*42*/btnGunLeft,     /*43*/unavailable,    /*44*/unavailable,
                                  /*45*/btnPump,       /*46*/unavailable,    /*47*/btnPedal,       /*48*/neoPixel,       /*49*/unavailable}},
         //=====================================================================================================
+        // Notes: ESP32          /*xx*/ indicates the number of the GPIO es. /*02*/ for GPIO2
+        {"waveshare-esp32-s3-pico",    {/*00*/unavailable,   /*01*/periphSDA,      /*02*/periphSCL,      /*03*/unavailable,    /*04*/camSDA,
+                                        /*05*/camSCL     ,   /*06*/btnUnmapped,    /*07*/analogY,        /*08*/analogX,        /*09*/tempPin,
+                                        /*10*/btnUnmapped,   /*11*/btnGunA,        /*12*/btnGunB,        /*13*/btnGunC,        /*14*/btnStart,
+                                        /*15*/btnSelect,     /*16*/btnHome,        /*17*/btnGunUp,       /*18*/btnGunDown,     /*19*/unavailable,
+                                        /*20*/unavailable,   /*21*/unavailable,    /*22*/unavailable,    /*23*/unavailable,    /*24*/unavailable,
+                                        /*25*/unavailable,   /*26*/unavailable,    /*27*/unavailable,    /*28*/unavailable,    /*29*/unavailable,
+                                        /*30*/unavailable,   /*31*/unavailable,    /*32*/unavailable,    /*33*/btnGunLeft,     /*34*/btnGunRight,
+                                        /*35*/btnUnmapped,   /*36*/btnUnmapped,    /*37*/btnUnmapped,    /*38*/btnPump,        /*39*/btnPedal,
+                                        /*40*/btnTrigger,    /*41*/rumblePin,      /*42*/solenoidPin,    /*43*/unavailable,    /*44*/unavailable,
+                                        /*45*/unavailable,   /*46*/unavailable,    /*47*/unavailable,    /*48*/unavailable,    /*49*/unavailable}},
+        //=====================================================================================================
     };
 
 // Only needed for the Desktop App, don't build for microcontroller firmware!
@@ -345,13 +360,14 @@ public:
     };
 
     inline static const std::unordered_map<std::string, const char *> boardNames = {
-        {"rpipico",             "Raspberry Pi Pico (RP2040)"},
-        {"rpipicow",            "Raspberry Pi Pico W (RP2040)"},
-        {"adafruitItsyRP2040",  "Adafruit ItsyBitsy RP2040"},
-        {"adafruitKB2040",      "Adafruit Keeboar KB2040"},
-        {"arduinoNanoRP2040",   "Arduino Nano Connect RP2040"},
-        {"waveshareZero",       "Waveshare Zero RP2040"},
-        {"esp32-s3-devkitc-1",  "Esp32-S3 Devkitc-1"},
+        {"rpipico",                 "Raspberry Pi Pico (RP2040)"},
+        {"rpipicow",                "Raspberry Pi Pico W (RP2040)"},
+        {"adafruitItsyRP2040",      "Adafruit ItsyBitsy RP2040"},
+        {"adafruitKB2040",          "Adafruit Keeboar KB2040"},
+        {"arduinoNanoRP2040",       "Arduino Nano Connect RP2040"},
+        {"waveshareZero",           "Waveshare Zero RP2040"},
+        {"esp32-s3-devkitc-1",      "Esp32-S3 Devkitc-1"},
+        {"waveshare-esp32-s3-pico", "Waveshare Esp32-S3-pico"},
         // Add more here!
         {"generic",             "Unknown Board"}
     };
@@ -446,7 +462,19 @@ public:
                                  /*40*/15+posLeft,    /*41*/16+posLeft,     /*42*/17+posLeft,     /*43*/posNothing,     /*44*/posNothing,
                                  /*45*/8+posLeft,     /*46*/posNothing,     /*47*/6+posLeft,      /*48*/7+posLeft,      /*49*/posNothing}},
         //=====================================================================================================
-
+        //=====================================================================================================
+        // Notes: ESP32          /*xx*/ indicates the number of the GPIO es. /*02*/ for GPIO2
+        {"waveshare-esp32-s3-pico",    {/*00*/posNothing,    /*01*/17+posRight,    /*02*/16+posRight,    /*03*/posNothing,     /*04*/15+posRight,
+                                        /*05*/14+posRight,   /*06*/12+posRight,    /*07*/10+posRight,    /*08*/9+posRight,     /*09*/7+posRight,
+                                        /*10*/6+posRight,    /*11*/1+posLeft,      /*12*/2+posLeft,      /*13*/4+posLeft,      /*14*/5+posLeft,
+                                        /*15*/6+posLeft,     /*16*/7+posLeft,      /*17*/9+posLeft,      /*18*/10+posLeft,     /*19*/posNothing,
+                                        /*20*/posNothing,    /*21*/posNothing,     /*22*/posNothing,     /*23*/posNothing,     /*24*/posNothing,
+                                        /*25*/posNothing,    /*26*/posNothing,     /*27*/posNothing,     /*28*/posNothing,     /*29*/posNothing,
+                                        /*30*/posNothing,    /*31*/posNothing,     /*32*/posNothing,     /*33*/11+posLeft,     /*34*/12+posLeft,
+                                        /*35*/14+posLeft,    /*36*/15+posLeft,     /*37*/16+posLeft,     /*38*/17+posLeft,     /*39*/19+posLeft,
+                                        /*40*/20+posLeft,    /*41*/19+posRight,    /*42*/20+posRight,    /*43*/posNothing,     /*44*/posNothing,
+                                        /*45*/posNothing,    /*46*/posNothing,     /*47*/posNothing,     /*48*/posNothing,     /*49*/posNothing}},
+//=====================================================================================================
         //=====================================================================================================
         // Generic layout
         // Just reveal all pins; user assumes full responsibility if something goes wrong here
