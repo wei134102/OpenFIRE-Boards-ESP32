@@ -310,7 +310,7 @@ public:
                                         /*05*/camSCL     ,   /*06*/btnUnmapped,    /*07*/analogY,        /*08*/analogX,        /*09*/tempPin,
                                         /*10*/btnUnmapped,   /*11*/btnGunA,        /*12*/btnGunB,        /*13*/btnGunC,        /*14*/btnStart,
                                         /*15*/btnSelect,     /*16*/btnHome,        /*17*/btnGunUp,       /*18*/btnGunDown,     /*19*/unavailable,
-                                        /*20*/unavailable,   /*21*/unavailable,    /*22*/unavailable,    /*23*/unavailable,    /*24*/unavailable,
+                                        /*20*/unavailable,   /*21*/neoPixel,       /*22*/unavailable,    /*23*/unavailable,    /*24*/unavailable,
                                         /*25*/unavailable,   /*26*/unavailable,    /*27*/unavailable,    /*28*/unavailable,    /*29*/unavailable,
                                         /*30*/unavailable,   /*31*/unavailable,    /*32*/unavailable,    /*33*/btnGunLeft,     /*34*/btnGunRight,
                                         /*35*/btnUnmapped,   /*36*/btnUnmapped,    /*37*/btnUnmapped,    /*38*/btnPump,        /*39*/btnPedal,
