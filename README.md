@@ -45,23 +45,38 @@ This is for optional alternative board presets, which are to be presented in a B
 This is the repository of board vectors that Desktop Apps should use for Board Layout views to graphically represent the current board that's docked to the application. Board vectors should be exported as *Plain SVG* (or equivalent), and added to the `vectors.qrc` resource file, where the alias for each file should match the names as defined in `OpenFIREshared.h`'s `OPENFIRE_BOARD` string for the board.
 
 The current reference Desktop App is capable of showing *highlighted pins* when the user hovers over a GPIO pin item in the interface. To do this, the SVGs will need to be modified with the following (using Inkscape as the primary interface example):
- 0. asdasd
- 1. Create highlight elements (so basic ellipses, no stroke, basic single color fill) in its own group below the main board vector's objects (preferably make the original board elements its own group), and each element needs to be named `OF_pinX` - where X == GPIO pin number, without a leading 0.
- 2. Open the board vector file in a text editor, and find the entries for the highlights that were created; each entry needs to be adjusted so that the `id="OF_pinX"` line is **above** the line that starts with `style=`, which needs to start on the new line *without* whitespace padding. Observe the following snippet from the raw text of [`pico.svg`](boardPics/pico.svg) below:
-```html
-  <g
-     id="OF">
-    <path
-       id="OF_pin1"
-style="opacity:0;fill:#ebe713;fill-opacity:1"
-       class="st10"
-       d="M19.7,47.4c0,3.4-2.9,6.2-6.3,6.2s-6.2-2.8-6.3-6.2,2.7-6.3,6.1-6.4c3.4,0,6.3,2.6,6.5,6" />
-    <path
-       id="OF_pin2"
-style="opacity:0;fill:#ebe713;fill-opacity:1"
-       class="st10"
-       d="M19.8,88.1c0,3.4-2.9,6.2-6.3,6.2s-6.2-2.8-6.3-6.2c0-3.4,2.7-6.3,6.1-6.4,3.4,0,6.3,2.6,6.5,6" />
-...
-```
- 4. The style line then needs to have `"opacity:0;` added **at the start of its string,** as shown above.
-This above procedure should be done for every *accessible* GPIO pin for the board (so e.g. pins that would be `unavailable` in the `boardPresetsMap` does not need to be added). To make sure it's working, rebuild the App with the new file saved and check the board in *Help -> View Compatible Boards* to see if the correct pins are highlighted correctly when moused over; if not, double-check that your formatting is correct, as the code for the reference app is searching for the `style="opacity:0` text immediately after a `\n` newline character.
+ 1. If it's not already, group all of the image's existing board objects into its own group (name doesn't matter). Also make sure that the pin holes are actually transparent beneath and are not filled with a background color.
+ 2. Create a new group that's *below* the board group - again, name doesn't matter, but for ease of use you should call it something like `OF`
+ 3. Inside this newly made highlights group, create the highlight elements with no stroke, and basic single flat color fill (existing boards uses RGBA `ebe713`, or *R253/G231/B19*).
+ 4. Select the highlight element and go to the *Object Properties* tab (or equivalent that shows the *"ID"* line): each highlight element needs to have an ID named `OF_pinX` - where X == GPIO pin number, without a leading 0.
+ 5. While the element is highlighted, go to the *Fill and Stroke* tab (or equivalent that shows *"Opacity (%)"*) and set the Opacity to **0.0**.
+ 6. Once the placement, naming, and opacity of everything is satisfactory, save the file as a ***Plain SVG*** file inside of the `boardPics` directory. Make sure `vectors.qrc` has this board listed as an alias to the `OPENFIRE_BOARD` string you set for this microcontroller in `OpenFIREshared.h`!
+
+> [!NOTE]
+> This procedure should be done **only** for every *accessible* GPIO pin for the board (i.e. the pins that would be `unavailable` in the `boardPresetsMap` should not be added, as these will be hidden by the application).
+
+Once this is finished, rebuild the application and test out the board picture; the easiest way being to use the *Help->View Compatible Boards* window, and hover the mouse cursor over the labels corresponding to the GPIO.
+
+> [!NOTE]
+> - If the board picture doesn't display at all, it's likely that the vector either isn't named appropriately or wasn't exported properly - double check that you followed Step 6 above correctly.
+> - If the board picture displays, but highlights do not (or show up to the wrong pins), it's likely that you might need to manually edit some lines in the exported SVG in a text editor, such as Notepad. The technical requirements for vectors to work - and the things to check - are:
+>   - That the `id="OF_pinX"` lines are *above* the `style="` line.
+>   - That the `style="` line has `opacity:0` inside of it (preferably either `0` or `0.0`; whichever one it is doesn't matter, so long as it matches).
+> Refer to the following example below (snippit from [`pico.svg`](boardPics/pico.svg)) for the general ideal formatting of each highlight element:
+> ```html
+>   <g
+>      id="OF">
+>     <path
+>        id="OF_pin1"
+>        style="opacity:0;fill:#ebe713;fill-opacity:1"
+>        class="st10"
+>        d="M19.7,47.4c0,3.4-2.9,6.2-6.3,6.2s-6.2-2.8-6.3-6.2,2.7-6.3,6.1-6.4c3.4,0,6.3,2.6,6.5,6" />
+>     <path
+>        id="OF_pin2"
+>        style="opacity:0;fill:#ebe713;fill-opacity:1"
+>        class="st10"
+>        d="M19.8,88.1c0,3.4-2.9,6.2-6.3,6.2s-6.2-2.8-6.3-6.2c0-3.4,2.7-6.3,6.1-6.4,3.4,0,6.3,2.6,6.5,6" />
+> ...
+> ```
+
+
