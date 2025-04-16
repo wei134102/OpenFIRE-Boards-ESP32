@@ -253,8 +253,8 @@ public:
         // Notes: rpi boards do not expose pins 23-25; pin 29/A3 is used for builtin chipset temp monitor
         {"rpipicow",            {   btnGunA,       btnGunB,        btnGunC,        btnStart,       btnSelect,
                                     btnHome,       btnGunUp,       btnGunDown,     btnGunLeft,     btnGunRight,
-                                    ledR,          ledG,           ledB,           btnPump,        btnPedal,
-                                    btnTrigger,    solenoidPin,    rumblePin,      periphSDA,      periphSCL,
+                                    periphSDA,     periphSCL,      btnUnmapped,    btnPump,        btnPedal,
+                                    btnTrigger,    solenoidPin,    rumblePin,      btnUnmapped,    btnUnmapped,
                                     camSDA,        camSCL,         btnUnmapped,    unavailable,    unavailable,
                                     unavailable,   analogY,        analogX,        tempPin,        unavailable}},
         //=====================================================================================================
@@ -305,14 +305,14 @@ public:
                                         /*45*/btnPump,       /*46*/unavailable,    /*47*/btnPedal,       /*48*/neoPixel,       /*49*/unavailable}},
         //=====================================================================================================
         // Notes: ESP32          /*xx*/ indicates the number of the GPIO es. /*02*/ for GPIO2
-        {"waveshare-esp32-s3-pico",    {/*00*/unavailable,   /*01*/periphSDA,      /*02*/periphSCL,      /*03*/unavailable,    /*04*/camSDA,
+        {"waveshare-esp32-s3-pico",    {/*00*/unavailable,   /*01*/btnUnmapped,    /*02*/btnUnmapped,    /*03*/unavailable,    /*04*/camSDA,
                                         /*05*/camSCL     ,   /*06*/btnUnmapped,    /*07*/analogY,        /*08*/analogX,        /*09*/tempPin,
                                         /*10*/btnUnmapped,   /*11*/btnGunA,        /*12*/btnGunB,        /*13*/btnGunC,        /*14*/btnStart,
                                         /*15*/btnSelect,     /*16*/btnHome,        /*17*/btnGunUp,       /*18*/btnGunDown,     /*19*/unavailable,
                                         /*20*/unavailable,   /*21*/neoPixel,       /*22*/unavailable,    /*23*/unavailable,    /*24*/unavailable,
                                         /*25*/unavailable,   /*26*/unavailable,    /*27*/unavailable,    /*28*/unavailable,    /*29*/unavailable,
                                         /*30*/unavailable,   /*31*/unavailable,    /*32*/unavailable,    /*33*/btnGunLeft,     /*34*/btnGunRight,
-                                        /*35*/btnUnmapped,   /*36*/btnUnmapped,    /*37*/btnUnmapped,    /*38*/btnPump,        /*39*/btnPedal,
+                                        /*35*/periphSDA,     /*36*/periphSCL,      /*37*/btnUnmapped,    /*38*/btnPump,        /*39*/btnPedal,
                                         /*40*/btnTrigger,    /*41*/rumblePin,      /*42*/solenoidPin,    /*43*/unavailable,    /*44*/unavailable,
                                         /*45*/unavailable,   /*46*/unavailable,    /*47*/unavailable,    /*48*/unavailable,    /*49*/unavailable}},
         //=====================================================================================================
