@@ -15,6 +15,11 @@ Whenever changes are made to the original 'OpenFIRE-Boards' project by TeamOpenF
 I sincerely thank TeamOpenFIRE for creating the 'OpenFIRE-Boards' project; all credit and gratitude go to them for their work.
 This is simply an adaptation to make it work on ESP32S3.
 
+![Waveshare-esp32-s3-pico](https://github.com/user-attachments/assets/2ce848f3-f308-43cc-b753-3b1dac1647e4)
+
+![YD-esp32-s3-wroom1-DevKitC-1-N16R8](https://github.com/user-attachments/assets/080baf9b-f050-4b3e-ba59-4fb4aa784909)
+
+
 ## ... segue la pagina originale del progetto
 ## ... follows the original project page
 
