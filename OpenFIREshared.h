@@ -179,6 +179,12 @@ public:
         sTestLEDG,
         sTestLEDB,
 
+        // 696969 inseriti provvesoriamente per abilitare disabilitare invio dati in modalità docked
+        sDockedSaving = 69,
+        sDockedSaving_on,
+        sDockedSaving_off,
+        // 696969 inseriti provvisoriamente
+
         // Error types from board (with sError)
         sErrCam = 0x80, // 128
         sErrPeriphGeneric,
