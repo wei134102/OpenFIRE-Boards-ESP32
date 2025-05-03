@@ -22,7 +22,6 @@
 #ifndef _OPENFIRESHARED_H_
 #define _OPENFIRESHARED_H_
 
-#include <cstdint>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -54,10 +53,8 @@
 class OF_Const
 {
 public:
-    // !!! These orders should remain the same to maintain backwards compatibility!!!
-    // Any new slots should explicitly be added at the bottom above the "count" line
-
-    // Inputs
+    // Any new slots should ideally be added at the bottom, above the "count" line
+    // Inputs Map indices
     enum {
         unavailable = -2,
         btnUnmapped = -1,
@@ -88,7 +85,6 @@ public:
         camSCL,
         periphSDA,
         periphSCL,
-        battery,
         analogX,
         analogY,
         tempPin,
@@ -97,7 +93,55 @@ public:
         boardInputsCount
     } boardInputs_e;
 
-    // Boolean/toggle settings
+    // Note: names should be written in plain english,
+    // as these name strings are shared with Apps
+    const std::unordered_map<std::string, int> boardInputs_Strings = {
+        {"Unmapped",            btnUnmapped     },
+        {"Trigger",             btnTrigger      },
+        {"Button A",            btnGunA         },
+        {"Button B",            btnGunB         },
+        {"Button C",            btnGunC         },
+        {"Start",               btnStart        },
+        {"Select",              btnSelect       },
+        {"D-Pad Up",            btnGunUp        },
+        {"D-Pad Down",          btnGunDown      },
+        {"D-Pad Left",          btnGunLeft      },
+        {"D-Pad Right",         btnGunRight     },
+        {"Pedal",               btnPedal        },
+        {"Alt Pedal",           btnPedal2       },
+        {"Pump Action",         btnPump         },
+        {"Home Button",         btnHome         },
+        {"Rumble Signal",       rumblePin       },
+        {"Solenoid Signal",     solenoidPin     },
+        {"Rumble Switch",       rumbleSwitch    },
+        {"Solenoid Switch",     solenoidSwitch  },
+        {"Autofire Switch",     autofireSwitch  },
+        {"External NeoPixel",   neoPixel        },
+        {"RGB LED Red",         ledR            },
+        {"RGB LED Green",       ledG            },
+        {"RGB LED Blue",        ledB            },
+        {"Camera SDA",          camSDA          },
+        {"Camera SCL",          camSCL          },
+        {"Peripherals SDA",     periphSDA       },
+        {"Peripherals SCL",     periphSCL       },
+        {"Analog Stick X",      analogX         },
+        {"Analog Stick Y",      analogY         },
+        {"Temperature Sensor",  tempPin         },
+        {"Wii Cam Clock",       wiiClockGen     },
+    };
+
+    // For Apps to use for lists of pin functions
+    char* boardInputs_sortedStr[boardInputsCount+1];
+
+    // Constructor
+    OF_Const() {
+#ifdef OF_APP // generate strings list for the available board inputs
+        for(auto &func : boardInputs_Strings)
+            boardInputs_sortedStr[func.second+1] = (char*)func.first.c_str();
+#endif // OF_APP
+    }
+
+    // Boolean/toggle settings indices
     enum {
         customPins = 0,
         rumble,
@@ -109,11 +153,28 @@ public:
         lowButtonsMode,
         rumbleFF,
         invertStaticPixels,
+        i2cOLED,
+        i2cOLEDaltAddr,
         // Add here
         boolTypesCount
     } boolTypes_e;
 
-    // Variable settings
+    const std::unordered_map<std::string, int> boolTypes_Strings = {
+        {"CustomPins",          customPins          },
+        {"Rumble",              rumble              },
+        {"Solenoid",            solenoid            },
+        {"Autofire",            autofire            },
+        {"SimplePause",         simplePause         },
+        {"HoldToPause",         holdToPause         },
+        {"LEDAnode",            commonAnode         },
+        {"LowButtons",          lowButtonsMode      },
+        {"RumbFFB",             rumbleFF            },
+        {"InvertStaticPixels",  invertStaticPixels  },
+        {"I2COLEDEnabled",      i2cOLED             },
+        {"I2COLEDAltAddr",      i2cOLEDaltAddr      },
+    };
+
+    // Variable settings indices
     enum {
         rumbleStrength = 0,
         rumbleInterval,
@@ -132,26 +193,67 @@ public:
         settingsTypesCount
     } settingsTypes_e;
 
-    // Layout types
+    const std::unordered_map<std::string, int> settingsTypes_Strings = {
+        {"RumbPwr",             rumbleStrength      },
+        {"RumbTime",            rumbleInterval      },
+        {"SolOn",               solenoidOnLength    },
+        {"SolOff",              solenoidOffLength   },
+        {"SolHold",             solenoidHoldLength  },
+        {"HoldToPauseLength",   holdToPauseLength   },
+        {"CtmPixelsCount",      customLEDcount      },
+        {"StaticPixels",        customLEDstatic     },
+        {"StaticColor1",        customLEDcolor1     },
+        {"StaticColor2",        customLEDcolor2     },
+        {"StaticColor3",        customLEDcolor3     },
+        {"TempWarning",         tempWarning         },
+        {"TempDanger",          tempShutdown        },
+    };
+
+    // Profile data type indices
+    // this MUST match the order of ProfileData_s in (FW)OpenFIREprefs
+    // as ProfData is accessed by struct offset.
+    enum {
+        profTopOffset = 0,
+        profBottomOffset,
+        profLeftOffset,
+        profRightOffset,
+        profTLled,
+        profTRled,
+        profAdjX,
+        profAdjY,
+        profIrSens,
+        profRunMode,
+        profIrLayout,
+        profColor,
+        profName,
+        profDataTypes,
+        profCurrent = 0xFD,
+    } profSyncTypes_e;
+
+    const std::unordered_map<std::string, int> profSettingTypes_Strings = {
+        {"TopOffset",   profTopOffset       },
+        {"BtmOffset",   profBottomOffset    },
+        {"LftOffset",   profLeftOffset      },
+        {"RhtOffset",   profRightOffset     },
+        {"TLLed",       profTLled           },
+        {"TRLed",       profTRled           },
+        {"AdjX",        profAdjX            },
+        {"AdjY",        profAdjY            },
+        {"IrSens",      profIrSens          },
+        {"IrRunMode",   profRunMode         },
+        {"IrLayout",    profIrLayout        },
+        {"Color",       profColor           },
+        {"Name",        profName            },
+        {"CurrentProf", profCurrent         },
+    };
+
+    // Layout types indices
     enum {
         layoutSquare = 0,
         layoutDiamond,
         // Add here
         layoutTypes
     } layoutTypes_e;
-
-    // Peripheral types
-    enum {
-        i2cOLED = 0,
-        // Add here
-        i2cDevicesCount,
-        i2cDevicesEnabled = 0xFA,
-
-        //// setting types for devices
-        // For OLED:
-        oledAltAddr = 0,
-        oledSettingsTypes,
-    } i2cPeriphTypes_e;
 
     /* ////
      * Shared serial control/signal codes for both boards and app.
@@ -206,14 +308,12 @@ public:
         sCommitSettings,
         sCommitProfile,
         sCommitID,
-        sCommitPeriphs,
 
         // Grab settings from board
         sGetPins = 0xC8, // 200
         sGetToggles,
         sGetSettings,
         sGetProfile,
-        sGetPeriphs,
 
         sError = 0xFA, // 250
         sSave = 0xFC, // 252
@@ -223,30 +323,13 @@ public:
     } serialCmdTypes_e;
 
     enum {
-        profTopOffset = 0,
-        profBottomOffset,
-        profLeftOffset,
-        profRightOffset,
-        profTLled,
-        profTRled,
-        profAdjX,
-        profAdjY,
-        profIrSens,
-        profRunMode,
-        profIrLayout,
-        profColor,
-        profDataTypes,
-        profName = 0xFA,
-    } profSyncTypes_e;
-
-    enum {
         usbPID = 0,
         usbName,
     } usbIdSyncTypes_e;
 
     /// @brief      Map of default pin mappings for each supported board
     /// @details    Key = board, int array maps to RP2040 GPIO where each value is a FW function (or unmapped).
-    inline static const std::unordered_map<std::string, std::vector<int>> boardsPresetsMap = {
+    const std::unordered_map<std::string, std::vector<int>> boardsPresetsMap = {
         //=====================================================================================================
         // Notes: rpi boards do not expose pins 23-25; pin 29/A3 is used for builtin chipset temp monitor
         {"rpipico",             {   btnGunA,       btnGunB,        btnGunC,        btnStart,       btnSelect,
@@ -327,50 +410,13 @@ public:
 // Only needed for the Desktop App, don't build for microcontroller firmware!
 #ifdef OF_APP
 
-    // Used by pinBoxes, matching boardInputs_e (except "unavailable")
-    inline static const char* valuesNameList[] = {
-        "Unmapped",
-        "Trigger",
-        "Button A",
-        "Button B",
-        "Button C",
-        "Start",
-        "Select",
-        "D-Pad Up",
-        "D-Pad Down",
-        "D-Pad Left",
-        "D-Pad Right",
-        "Pedal",
-        "Alt Pedal",
-        "Pump Action",
-        "Home Button",
-        "Rumble Signal",
-        "Solenoid Signal",
-        "Rumble Switch",
-        "Solenoid Switch",
-        "Autofire Switch",
-        "External NeoPixel",
-        "RGB LED Red",
-        "RGB LED Green",
-        "RGB LED Blue",
-        "Camera SDA",
-        "Camera SCL",
-        "Peripherals SDA",
-        "Peripherals SCL",
-        "Battery Sensor (Unused)",
-        "Analog Stick X",
-        "Analog Stick Y",
-        "Temp Sensor",
-        "Wii Cam Clock",
-    };
-
-    inline static const std::unordered_map<std::string, const char *> boardNames = {
-        {"rpipico",                 "Raspberry Pi Pico (RP2040)"},
-        {"rpipicow",                "Raspberry Pi Pico W (RP2040)"},
-        {"adafruitItsyRP2040",      "Adafruit ItsyBitsy RP2040"},
-        {"adafruitKB2040",          "Adafruit Keeboar KB2040"},
-        {"arduinoNanoRP2040",       "Arduino Nano Connect RP2040"},
-        {"waveshareZero",           "Waveshare Zero RP2040"},
+    const std::unordered_map<std::string, const char *> boardNames = {
+        {"rpipico",             "Raspberry Pi Pico (RP2040)"},
+        {"rpipicow",            "Raspberry Pi Pico W (RP2040)"},
+        {"adafruitItsyRP2040",  "Adafruit ItsyBitsy RP2040"},
+        {"adafruitKB2040",      "Adafruit Keeboar KB2040"},
+        {"arduinoNanoRP2040",   "Arduino Nano Connect RP2040"},
+        {"waveshareZero",       "Waveshare Zero RP2040"},
         {"esp32-s3-devkitc-1",      "Esp32-S3 Devkitc-1 N16R8"},
         {"waveshare-esp32-s3-pico", "Waveshare Esp32-S3-pico"},
         // Add more here!
@@ -391,7 +437,7 @@ public:
     ///             Unexposed pins should use only posNothing (0).
     ///             (Yep, bitpacking! Three least significant bits of the second byte determine left/right/under position)
     ///             (If anyone is aware of a better way of doing this, please let me know/send a PR!)
-    inline static const std::unordered_map<std::string, std::vector<unsigned int>> boardsBoxPositions = {
+    const std::unordered_map<std::string, std::vector<unsigned int>> boardsBoxPositions = {
         //=====================================================================================================
         // Raspberry Pi Pico: 15 pins left, rest of the pins right. Mostly linear order save for the reserved pins.
         // Notes: rpi boards do not expose pins 23-25; pin 29/A3 is used for builtin chipset temp monitor
@@ -452,8 +498,9 @@ public:
         // Insert new layouts below this one!
         // Feel free to use any of the above as a template.
         // ***
-
-         //=====================================================================================================
+        
+        
+        //=====================================================================================================
         // Esp32 S3 Devkitc 1
         // Notes: Esp32          /*xx*/ indicates the number of the GPIO es. /*02*/ for GPIO2
         {"esp32-s3-devkitc-1",         {/*00*/posNothing,    /*01*/19+posLeft,     /*02*/18+posLeft,     /*03*/posNothing,     /*04*/19+posRight,
@@ -498,7 +545,7 @@ public:
 
     /// @brief      MultiMap of alternative pin mappings for supported boards to show in the application.
     /// @details    Key = board (one board can be multiple), string literal label, int array maps to RP2040 GPIO where each value is a FW function (or unmapped).
-    inline static const std::unordered_multimap<std::string, boardAltPresetsMap_t> boardsAltPresets = {
+    const std::unordered_multimap<std::string, boardAltPresetsMap_t> boardsAltPresets = {
         //=====================================================================================================
         // Raspberry Pi Pico Presets (currently a test)
         // Notes: rpi boards do not expose pins 23-25; pin 29/A3 is used for builtin chipset temp monitor
