@@ -317,6 +317,7 @@ public:
         sCommitPins,
         sCommitSettings,
         sCommitProfile,
+        sCommitBtns,
         sCommitID,
 
         // Grab settings from board
@@ -324,6 +325,7 @@ public:
         sGetToggles,
         sGetSettings,
         sGetProfile,
+        sGetBtns,
 
         sError = 0xFA, // 250
         sSave = 0xFC, // 252
@@ -508,8 +510,8 @@ public:
         // Insert new layouts below this one!
         // Feel free to use any of the above as a template.
         // ***
-        
-        
+
+
         //=====================================================================================================
         // Esp32 S3 Devkitc 1
         // Notes: Esp32          /*xx*/ indicates the number of the GPIO es. /*02*/ for GPIO2
