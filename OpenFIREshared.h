@@ -23,37 +23,38 @@
 #define _OPENFIRESHARED_H_
 
 #include <string>
+#include <map>
 #include <unordered_map>
 #include <vector>
 
 //// BOARD IDENTIFIERS (for Desktop App identification and determining presets)
 
 #ifdef ARDUINO_ADAFRUIT_ITSYBITSY_RP2040
-    #define OPENFIRE_BOARD "adafruitItsyRP2040"
+#define OPENFIRE_BOARD "adafruitItsyRP2040"
 #elifdef ARDUINO_ADAFRUIT_KB2040_RP2040
-    #define OPENFIRE_BOARD "adafruitKB2040"
+#define OPENFIRE_BOARD "adafruitKB2040"
 #elifdef ARDUINO_NANO_RP2040_CONNECT
-    #define OPENFIRE_BOARD "arduinoNanoRP2040"
+#define OPENFIRE_BOARD "arduinoNanoRP2040"
 #elifdef ARDUINO_WAVESHARE_RP2040_ZERO
-    #define OPENFIRE_BOARD "waveshareZero"
+#define OPENFIRE_BOARD "waveshareZero"
 #elifdef ARDUINO_YD_RP2040
-    #define OPENFIRE_BOARD "vccgndYD"
+#define OPENFIRE_BOARD "vccgndYD"
 #elifdef ARDUINO_RASPBERRY_PI_PICO
-    #define OPENFIRE_BOARD "rpipico"
+#define OPENFIRE_BOARD "rpipico"
 #elifdef ARDUINO_RASPBERRY_PI_PICO_W
-    #define OPENFIRE_BOARD "rpipicow"
+#define OPENFIRE_BOARD "rpipicow"
 #elifdef ARDUINO_ESP32_S3_WROOM1_DevKitC_1_N16R8
     #define OPENFIRE_BOARD "esp32-s3-devkitc-1"
 #elifdef ARDUINO_WAVESHARE_ESP32_S3_PICO
     #define OPENFIRE_BOARD "waveshare-esp32-s3-pico"
 #else
-    #define OPENFIRE_BOARD "generic"
+#define OPENFIRE_BOARD "generic"
 #endif // board
 
 class OF_Const
 {
 public:
-    // Any new slots should ideally be added at the bottom, above the "count" line
+    // Any new non-btn slots should ideally be added at the bottom, above the "count" line
     // Inputs Map indices
     enum {
         unavailable = -2,
@@ -72,6 +73,7 @@ public:
         btnPedal2,
         btnPump,
         btnHome,
+        // ^ btn inputs
         rumblePin,
         solenoidPin,
         rumbleSwitch,
@@ -89,7 +91,7 @@ public:
         analogY,
         tempPin,
         wiiClockGen,
-        // Add here
+        // Add non-button inputs here
         boardInputsCount
     } boardInputs_e;
 
@@ -189,6 +191,7 @@ public:
         customLEDcolor3,
         tempWarning,
         tempShutdown,
+        analogMode,
         // Add here
         settingsTypesCount
     } settingsTypes_e;
@@ -207,7 +210,14 @@ public:
         {"StaticColor3",        customLEDcolor3     },
         {"TempWarning",         tempWarning         },
         {"TempDanger",          tempShutdown        },
+        {"AnalogMode",          analogMode          },
     };
+
+    enum {
+        analogModeStick = 0,
+        analogModeDpad,
+        analogModeKeys
+    } analogModeSettings_e;
 
     // Profile data type indices
     // this MUST match the order of ProfileData_s in (FW)OpenFIREprefs
@@ -410,7 +420,7 @@ public:
 // Only needed for the Desktop App, don't build for microcontroller firmware!
 #ifdef OF_APP
 
-    const std::unordered_map<std::string, const char *> boardNames = {
+    const std::map<std::string, const char *> boardNames = {
         {"rpipico",             "Raspberry Pi Pico (RP2040)"},
         {"rpipicow",            "Raspberry Pi Pico W (RP2040)"},
         {"adafruitItsyRP2040",  "Adafruit ItsyBitsy RP2040"},
