@@ -234,6 +234,7 @@ public:
         profIrSens,
         profRunMode,
         profIrLayout,
+        profAR,
         profColor,
         profName,
         profDataTypes,
@@ -252,6 +253,7 @@ public:
         {"IrSens",      profIrSens          },
         {"IrRunMode",   profRunMode         },
         {"IrLayout",    profIrLayout        },
+        {"AspectRatio", profAR              },
         {"Color",       profColor           },
         {"Name",        profName            },
         {"CurrentProf", profCurrent         },
@@ -264,6 +266,15 @@ public:
         // Add here
         layoutTypes
     } layoutTypes_e;
+
+    // Aspect ratio indices
+    enum {
+        ar16_9 = 0,
+        ar16_10,
+        // Add here
+        ar4_3,
+        aspectRatiosCount
+    } aspectRatios_e;
 
     /* ////
      * Shared serial control/signal codes for both boards and app.
