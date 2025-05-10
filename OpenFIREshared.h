@@ -271,6 +271,8 @@ public:
     enum {
         ar16_9 = 0,
         ar16_10,
+        ar3_2,
+        ar5_4,
         // Add here
         ar4_3,
         aspectRatiosCount
