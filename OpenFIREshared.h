@@ -445,7 +445,7 @@ public:
         {"esp32-s3-devkitc-1",      "Esp32-S3 Devkitc-1 N16R8"},
         {"waveshare-esp32-s3-pico", "Waveshare Esp32-S3-pico"},
         // Add more here!
-        {"generic",             "Unknown Board"}
+        {"generic",             "Unknown RP2040 Board"}
     };
 
     enum {
@@ -574,6 +574,7 @@ public:
         //=====================================================================================================
         // Raspberry Pi Pico Presets (currently a test)
         // Notes: rpi boards do not expose pins 23-25; pin 29/A3 is used for builtin chipset temp monitor
+        /*
         {"rpipico",             {"Test",
                                 {   btnPump,       btnPedal,       btnUnmapped,    btnUnmapped,    btnUnmapped,
                                     btnUnmapped,   btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
@@ -589,11 +590,12 @@ public:
                                     btnUnmapped,   btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
                                     btnUnmapped,   btnUnmapped,    btnUnmapped,    unavailable,    unavailable,
                                     unavailable,   btnUnmapped,    btnUnmapped,    btnUnmapped,    unavailable}}},
+        */
 
         //=====================================================================================================
         // Adafruit ItsyBitsy RP2040 Presets
         // Notes: pins 13-17 & 21-23 are unexposed
-        {"adafruitItsyRP2040",  {"SAMCO 2.0",
+        {"adafruitItsyRP2040",  {"SAMCO 2.0 (Btn C as Home)",
                                 {   btnUnmapped,   btnUnmapped,    camSDA,         camSCL,         btnPedal,
                                     btnUnmapped,   btnTrigger,     btnGunDown,     btnGunLeft,     btnGunUp,
                                     btnGunRight,   btnHome,        btnUnmapped,    unavailable,    unavailable,
