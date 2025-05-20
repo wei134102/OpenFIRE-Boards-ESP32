@@ -30,25 +30,25 @@
 //// BOARD IDENTIFIERS (for Desktop App identification and determining presets)
 
 #ifdef ARDUINO_ADAFRUIT_ITSYBITSY_RP2040
-#define OPENFIRE_BOARD "adafruitItsyRP2040"
+    #define OPENFIRE_BOARD "adafruitItsyRP2040"
 #elifdef ARDUINO_ADAFRUIT_KB2040_RP2040
-#define OPENFIRE_BOARD "adafruitKB2040"
+    #define OPENFIRE_BOARD "adafruitKB2040"
 #elifdef ARDUINO_NANO_RP2040_CONNECT
-#define OPENFIRE_BOARD "arduinoNanoRP2040"
+    #define OPENFIRE_BOARD "arduinoNanoRP2040"
 #elifdef ARDUINO_WAVESHARE_RP2040_ZERO
-#define OPENFIRE_BOARD "waveshareZero"
+    #define OPENFIRE_BOARD "waveshareZero"
 #elifdef ARDUINO_YD_RP2040
-#define OPENFIRE_BOARD "vccgndYD"
+    #define OPENFIRE_BOARD "vccgndYD"
 #elifdef ARDUINO_RASPBERRY_PI_PICO
-#define OPENFIRE_BOARD "rpipico"
+    #define OPENFIRE_BOARD "rpipico"
 #elifdef ARDUINO_RASPBERRY_PI_PICO_W
-#define OPENFIRE_BOARD "rpipicow"
+    #define OPENFIRE_BOARD "rpipicow"
 #elifdef ARDUINO_ESP32_S3_WROOM1_DevKitC_1_N16R8
     #define OPENFIRE_BOARD "esp32-s3-devkitc-1"
 #elifdef ARDUINO_WAVESHARE_ESP32_S3_PICO
     #define OPENFIRE_BOARD "waveshare-esp32-s3-pico"
 #else
-#define OPENFIRE_BOARD "generic"
+    #define OPENFIRE_BOARD "generic"
 #endif // board
 
 class OF_Const
@@ -354,213 +354,309 @@ public:
 
     /// @brief      Map of default pin mappings for each supported board
     /// @details    Key = board, int array maps to RP2040 GPIO where each value is a FW function (or unmapped).
+    /// @note       /*xx*/ indicates the number of the GPIO, e.g. /*02*/ for GPIO-02
     const std::unordered_map<std::string, std::vector<int>> boardsPresetsMap = {
-        //=====================================================================================================
-        // Notes: rpi boards do not expose pins 23-25; pin 29/A3 is used for builtin chipset temp monitor
-        {"rpipico",             {   btnGunA,       btnGunB,        btnGunC,        btnStart,       btnSelect,
-                                    btnHome,       btnGunUp,       btnGunDown,     btnGunLeft,     btnGunRight,
-                                    ledR,          ledG,           ledB,           btnPump,        btnPedal,
-                                    btnTrigger,    solenoidPin,    rumblePin,      periphSDA,      periphSCL,
-                                    camSDA,        camSCL,         btnUnmapped,    unavailable,    unavailable,
-                                    unavailable,   btnUnmapped,    btnUnmapped,    tempPin,        unavailable}},
-        //=====================================================================================================
-        // Notes: rpi boards do not expose pins 23-25; pin 29/A3 is used for builtin chipset temp monitor
-        {"rpipicow",            {   btnGunA,       btnGunB,        btnGunC,        btnStart,       btnSelect,
-                                    btnHome,       btnGunUp,       btnGunDown,     btnGunLeft,     btnGunRight,
-                                    periphSDA,     periphSCL,      btnUnmapped,    btnPump,        btnPedal,
-                                    btnTrigger,    solenoidPin,    rumblePin,      btnUnmapped,    btnUnmapped,
-                                    camSDA,        camSCL,         btnUnmapped,    unavailable,    unavailable,
-                                    unavailable,   analogY,        analogX,        tempPin,        unavailable}},
-        //=====================================================================================================
+        //=====================================================================================================================
+        // Raspberry Pi Pico
+        // Board Type: RP2040
+        // Notes: Raspberry Pi boards do not expose pins 23-25; pin 29/A3 is used for builtin chipset temp monitor
+        {"rpipico",                 {/*00*/ btnGunA,        btnGunB,        btnGunC,        btnStart,       btnSelect,
+                                     /*05*/ btnHome,        btnGunUp,       btnGunDown,     btnGunLeft,     btnGunRight,
+                                     /*10*/ ledR,           ledG,           ledB,           btnPump,        btnPedal,
+                                     /*15*/ btnTrigger,     solenoidPin,    rumblePin,      periphSDA,      periphSCL,
+                                     /*20*/ camSDA,         camSCL,         btnUnmapped,    unavailable,    unavailable,
+                                     /*25*/ unavailable,    btnUnmapped,    btnUnmapped,    tempPin,        unavailable     }},
+        //=====================================================================================================================
+        // Raspberry Pi Pico W
+        // Notes: Raspberry Pi boards do not expose pins 23-25; pin 29/A3 is used for builtin chipset temp monitor
+        {"rpipicow",                {/*00*/ btnGunA,        btnGunB,        btnGunC,        btnStart,       btnSelect,
+                                     /*05*/ btnHome,        btnGunUp,       btnGunDown,     btnGunLeft,     btnGunRight,
+                                     /*10*/ periphSDA,      periphSCL,      btnUnmapped,    btnPump,        btnPedal,
+                                     /*15*/ btnTrigger,     solenoidPin,    rumblePin,      btnUnmapped,    btnUnmapped,
+                                     /*20*/ camSDA,         camSCL,         btnUnmapped,    unavailable,    unavailable,
+                                     /*25*/ unavailable,    analogY,        analogX,        tempPin,        unavailable     }},
+        //=====================================================================================================================
+        // Adafruit ItsyBitsy RP2040
+        // Board Type: RP2040
         // Notes: pins 13-17 & 21-23 are unexposed
-        {"adafruitItsyRP2040",  {   btnUnmapped,   btnUnmapped,    camSDA,         camSCL,         btnPedal,
-                                    btnUnmapped,   btnTrigger,     btnGunDown,     btnGunLeft,     btnGunUp,
-                                    btnGunRight,   btnGunC,        btnUnmapped,    unavailable,    unavailable,
-                                    unavailable,   unavailable,    unavailable,    btnUnmapped,    btnUnmapped,
-                                    btnUnmapped,   unavailable,    unavailable,    unavailable,    rumblePin,
-                                    solenoidPin,   btnGunB,        btnGunA,        btnStart,       btnSelect}},
-        //=====================================================================================================
+        {"adafruitItsyRP2040",      {/*00*/ btnUnmapped,    btnUnmapped,    camSDA,         camSCL,         btnPedal,
+                                     /*05*/ btnUnmapped,    btnTrigger,     btnGunDown,     btnGunLeft,     btnGunUp,
+                                     /*10*/ btnGunRight,    btnGunC,        btnUnmapped,    unavailable,    unavailable,
+                                     /*15*/ unavailable,    unavailable,    unavailable,    btnUnmapped,    btnUnmapped,
+                                     /*20*/ btnUnmapped,    unavailable,    unavailable,    unavailable,    rumblePin,
+                                     /*25*/ solenoidPin,    btnGunB,        btnGunA,        btnStart,       btnSelect       }},
+        //=====================================================================================================================
+        // Adafruit "Kee Boar" KB2040
+        // Board Type: RP2040
         // Notes: pins 11-17 & 21-25 are unexposed
-        {"adafruitKB2040",      {   btnUnmapped,   btnUnmapped,    camSDA,         camSCL,         btnGunB,
-                                    rumblePin,     btnGunC,        solenoidPin,    btnSelect,      btnStart,
-                                    btnGunRight,   unavailable,    unavailable,    unavailable,    unavailable,
-                                    unavailable,   unavailable,    unavailable,    btnGunUp,       btnGunLeft,
-                                    btnGunDown,    unavailable,    unavailable,    unavailable,    unavailable,
-                                    unavailable,   tempPin,        btnHome,        btnTrigger,     btnGunA}},
-        //=====================================================================================================
+        {"adafruitKB2040",          {/*00*/ btnUnmapped,    btnUnmapped,    camSDA,         camSCL,         btnGunB,
+                                     /*05*/ rumblePin,      btnGunC,        solenoidPin,    btnSelect,      btnStart,
+                                     /*10*/ btnGunRight,    unavailable,    unavailable,    unavailable,    unavailable,
+                                     /*15*/ unavailable,    unavailable,    unavailable,    btnGunUp,       btnGunLeft,
+                                     /*20*/ btnGunDown,     unavailable,    unavailable,    unavailable,    unavailable,
+                                     /*25*/ unavailable,    tempPin,        btnHome,        btnTrigger,     btnGunA         }},
+        //=====================================================================================================================
+        // Arduino Nano RP2040 Connect
         // Notes: pins 2-3, 8-11, 14, & 22-24 are unexposed;
         //        some other pins are analog, but controlled by NINA and thus are unavailable in OpenFIRE for the moment
-        {"arduinoNanoRP2040",   {   btnTrigger,    btnPedal,       unavailable,    unavailable,    btnGunA,
-                                    btnGunC,       btnUnmapped,    btnGunB,        unavailable,    unavailable,
-                                    unavailable,   unavailable,    camSDA,         camSCL,         unavailable,
-                                    btnUnmapped,   btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
-                                    btnUnmapped,   btnUnmapped,    unavailable,    unavailable,    unavailable,
-                                    btnUnmapped,   btnUnmapped,    btnUnmapped,    tempPin,        btnUnmapped}},
-        //=====================================================================================================
+        {"arduinoNanoRP2040",       {/*00*/ btnTrigger,     btnPedal,       unavailable,    unavailable,    btnGunA,
+                                     /*05*/ btnGunC,        btnUnmapped,    btnGunB,        unavailable,    unavailable,
+                                     /*10*/ unavailable,    unavailable,    camSDA,         camSCL,         unavailable,
+                                     /*15*/ btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
+                                     /*20*/ btnUnmapped,    btnUnmapped,    unavailable,    unavailable,    unavailable,
+                                     /*25*/ btnUnmapped,    btnUnmapped,    btnUnmapped,    tempPin,        btnUnmapped     }},
+        //=====================================================================================================================
+        // Waveshare Zero RP2040
         // Note: pin 16 is reserved for the board's builtin NeoPixel (not currently used?);
         //       pins 17-25 are underside pads which are not exposed in the app for layout reasons;
-        {"waveshareZero",       {   btnTrigger,    btnGunA,        btnGunB,        btnGunC,        btnStart,
-                                    btnSelect,     btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
-                                    btnUnmapped,   btnUnmapped,    btnUnmapped,    btnUnmapped,    camSDA,
-                                    camSCL,        unavailable,    btnUnmapped,    btnUnmapped,    btnUnmapped,
-                                    btnUnmapped,   btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
-                                    btnUnmapped,   btnUnmapped,    btnUnmapped,    btnUnmapped,    tempPin}},
-        //=====================================================================================================
-        // Notes: ESP32          /*xx*/ indicates the number of the GPIO es. /*02*/ for GPIO2
-        {"esp32-s3-devkitc-1",         {/*00*/unavailable,   /*01*/btnTrigger,     /*02*/btnGunRight,    /*03*/btnUnmapped,    /*04*/analogX,
-                                        /*05*/analogY,       /*06*/tempPin,        /*07*/btnUnmapped,    /*08*/camSDA,         /*09*/camSCL,
-                                        /*10*/btnUnmapped,   /*11*/btnUnmapped,    /*12*/btnUnmapped,    /*13*/btnUnmapped,    /*14*/btnUnmapped,
-                                        /*15*/periphSCL,     /*16*/rumblePin,      /*17*/solenoidPin,    /*18*/periphSDA,      /*19*/unavailable,
-                                        /*20*/unavailable,   /*21*/btnGunC,        /*22*/unavailable,    /*23*/unavailable,    /*24*/unavailable,
-                                        /*25*/unavailable,   /*26*/unavailable,    /*27*/unavailable,    /*28*/unavailable,    /*29*/unavailable,
-                                        /*30*/unavailable,   /*31*/unavailable,    /*32*/unavailable,    /*33*/unavailable,    /*34*/unavailable,
-                                        /*35*/btnHome,       /*36*/btnGunA,        /*37*/btnGunB,        /*38*/btnSelect,      /*39*/btnStart,
-                                        /*40*/btnGunUp,      /*41*/btnGunDown,     /*42*/btnGunLeft,     /*43*/unavailable,    /*44*/unavailable,
-                                        /*45*/btnPump,       /*46*/unavailable,    /*47*/btnPedal,       /*48*/neoPixel,       /*49*/unavailable}},
-        //=====================================================================================================
-        // Notes: ESP32          /*xx*/ indicates the number of the GPIO es. /*02*/ for GPIO2
-        {"waveshare-esp32-s3-pico",    {/*00*/unavailable,   /*01*/btnUnmapped,    /*02*/btnUnmapped,    /*03*/unavailable,    /*04*/camSDA,
-                                        /*05*/camSCL     ,   /*06*/btnUnmapped,    /*07*/analogY,        /*08*/analogX,        /*09*/tempPin,
-                                        /*10*/btnUnmapped,   /*11*/btnGunA,        /*12*/btnGunB,        /*13*/btnGunC,        /*14*/btnStart,
-                                        /*15*/btnSelect,     /*16*/btnHome,        /*17*/btnGunUp,       /*18*/btnGunDown,     /*19*/unavailable,
-                                        /*20*/unavailable,   /*21*/neoPixel,       /*22*/unavailable,    /*23*/unavailable,    /*24*/unavailable,
-                                        /*25*/unavailable,   /*26*/unavailable,    /*27*/unavailable,    /*28*/unavailable,    /*29*/unavailable,
-                                        /*30*/unavailable,   /*31*/unavailable,    /*32*/unavailable,    /*33*/btnGunLeft,     /*34*/btnGunRight,
-                                        /*35*/periphSDA,     /*36*/periphSCL,      /*37*/btnUnmapped,    /*38*/btnPump,        /*39*/btnPedal,
-                                        /*40*/btnTrigger,    /*41*/rumblePin,      /*42*/solenoidPin,    /*43*/unavailable,    /*44*/unavailable,
-                                        /*45*/unavailable,   /*46*/unavailable,    /*47*/unavailable,    /*48*/unavailable,    /*49*/unavailable}},
-        //=====================================================================================================
+        {"waveshareZero",           {/*00*/ btnTrigger,     btnGunA,        btnGunB,        btnGunC,        btnStart,
+                                     /*05*/ btnSelect,      btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
+                                     /*10*/ btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,    camSDA,
+                                     /*15*/ camSCL,         unavailable,    btnUnmapped,    btnUnmapped,    btnUnmapped,
+                                     /*20*/ btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
+                                     /*25*/ btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,    tempPin         }},
+        //=====================================================================================================================
+        // Espressif ESP32 S3 WROOM-1 DevkitC-1 N16R8
+        // Board Type: ESP32
+        {"esp32-s3-devkitc-1",      {/*00*/ unavailable,    btnTrigger,     btnGunRight,    btnUnmapped,    analogX,
+                                     /*05*/ analogY,        tempPin,        btnUnmapped,    camSDA,         camSCL,
+                                     /*10*/ btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
+                                     /*15*/ periphSCL,      rumblePin,      solenoidPin,    periphSDA,      unavailable,
+                                     /*20*/ unavailable,    btnGunC,        unavailable,    unavailable,    unavailable,
+                                     /*25*/ unavailable,    unavailable,    unavailable,    unavailable,    unavailable,
+                                     /*30*/ unavailable,    unavailable,    unavailable,    unavailable,    unavailable,
+                                     /*35*/ btnHome,        btnGunA,        btnGunB,        btnSelect,      btnStart,
+                                     /*40*/ btnGunUp,       btnGunDown,     btnGunLeft,     unavailable,    unavailable,
+                                     /*45*/ btnPump,        unavailable,    btnPedal,       neoPixel,       unavailable     }},
+        //=====================================================================================================================
+        // Waveshare ESP32 S3 Pico
+        // Board Type: ESP32
+        {"waveshare-esp32-s3-pico", {/*00*/ unavailable,    btnUnmapped,    btnUnmapped,    unavailable,    camSDA,
+                                     /*05*/ camSCL,         btnUnmapped,    analogY,        analogX,        tempPin,
+                                     /*10*/ btnUnmapped,    btnGunA,        btnGunB,        btnGunC,        btnStart,
+                                     /*15*/ btnSelect,      btnHome,        btnGunUp,       btnGunDown,     unavailable,
+                                     /*20*/ unavailable,    neoPixel,       unavailable,    unavailable,    unavailable,
+                                     /*25*/ unavailable,    unavailable,    unavailable,    unavailable,    unavailable,
+                                     /*30*/ unavailable,    unavailable,    unavailable,    btnGunLeft,     btnGunRight,
+                                     /*35*/ periphSDA,      periphSCL,      btnUnmapped,    btnPump,        btnPedal,
+                                     /*40*/ btnTrigger,     rumblePin,      solenoidPin,    unavailable,    unavailable,
+                                     /*45*/ unavailable,    unavailable,    unavailable,    unavailable,    unavailable     }},
+        //=====================================================================================================================
     };
 
 // Only needed for the Desktop App, don't build for microcontroller firmware!
 #ifdef OF_APP
 
     const std::map<std::string, const char *> boardNames = {
-        {"rpipico",             "Raspberry Pi Pico (RP2040)"},
-        {"rpipicow",            "Raspberry Pi Pico W (RP2040)"},
-        {"adafruitItsyRP2040",  "Adafruit ItsyBitsy RP2040"},
-        {"adafruitKB2040",      "Adafruit Keeboar KB2040"},
-        {"arduinoNanoRP2040",   "Arduino Nano Connect RP2040"},
-        {"waveshareZero",       "Waveshare Zero RP2040"},
-        {"esp32-s3-devkitc-1",      "Esp32-S3 Devkitc-1 N16R8"},
-        {"waveshare-esp32-s3-pico", "Waveshare Esp32-S3-pico"},
+        {"rpipico",                 "Raspberry Pi Pico (RP2040)"},
+        {"rpipicow",                "Raspberry Pi Pico W (RP2040)"},
+        {"adafruitItsyRP2040",      "Adafruit ItsyBitsy RP2040"},
+        {"adafruitKB2040",          "Adafruit Keeboar KB2040"},
+        {"arduinoNanoRP2040",       "Arduino Nano Connect RP2040"},
+        {"waveshareZero",           "Waveshare Zero RP2040"},
+        {"esp32-s3-devkitc-1",      "ESP32-S3 WROOM-1 DevkitC-1 (N16R8)"},
+        {"waveshare-esp32-s3-pico", "Waveshare ESP32-S3-Pico"},
         // Add more here!
         {"generic",             "Unknown RP2040 Board"}
     };
 
+    /// @brief      Types of board architectures
+    /// @details    Board archs are to be dictated by the application on a per-board basis,
+    ///             to be used for defining which pins are capable of what.
+    const char* boardArchs[2] = {
+        "rp2040_235X",
+        "esp32"
+    };
+
+    /// @brief      Indices for the boardArchs strings above
     enum {
-        posNothing = 0,
-        posLeft = 512,
-        posRight = 1024,
-        posMiddle = 2048
+        boardRP,
+        boardESP32
+    } boardArchs_e;
+
+    /// @brief      Indices to be used as a bitmap for defining pin capabilities
+    /// @note       Default (0) assumes the pin is digital only with no I2C or SPI capability
+    enum {
+        pinDigital = 0,          // macro for no special function at all
+        pinHasADC  = 0b00000001, // whether pin is connected to an ADC or not
+        pinI2C0SDA = 0b00000010, // pin has I2C0 SDA
+        pinI2C0SCL = 0b00000110, // pin has I2C0 SCL
+        pinI2C1SDA = 0b00001010, // pin has I2C1 SDA
+        pinI2C1SCL = 0b00001110, // pin has I2C1 SCL
+        pinSPI0RX  = 0b00100000, // pin has SPI0 RX
+        pinSPI0TX  = 0b01000000, // pin has SPI0 TX
+        pinSPI0SCK = 0b01100000, // pin has SPI0 SCK
+        pinSPI0CSn = 0b10000000, // pin has SPI0 CSn
+        pinSPI1RX  = 0b00110000, // pin has SPI1 RX
+        pinSPI1TX  = 0b01010000, // pin has SPI1 TX
+        pinSPI1SCK = 0b01110000, // pin has SPI1 SCK
+        pinSPI1CSn = 0b10010000, // pin has SPI1 CSn
+        // to be used in Application
+        pinCanSPI   = 0b11110000,
+        pinCanI2C   = 1 << 1,
+        // check if SCL, else SDA
+        pinIsI2CSCL = 1 << 2,
+        // check if I2C1, else I2C0
+        pinIsI2C1   = 1 << 3
+    } pinCapabilities_e;
+
+    /// @brief      Map of capabilities of each pin for a board type
+    /// @details    Dictates what types of functions a pin can be mapped to, based on its capabilities
+    ///             This applies to ALL boards using a specific architecture.
+    const std::unordered_map<std::string, std::vector<int>> mcuCapableMaps = {
+        //====================================================
+        // Base Microcontroller: RP2040 & RP235X(A|B)
+        // Because RP235X-series shares the lower 30 GPIO, both RPI MCUs can share the same map
+        {boardArchs[boardRP],   {/*00*/ pinI2C0SDA | pinSPI0RX,                     pinI2C0SCL | pinSPI0CSn,                pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,                 pinI2C0SDA | pinSPI0RX,
+                                 /*05*/ pinI2C0SCL | pinSPI0CSn,                    pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,                 pinI2C0SDA | pinSPI1RX,                 pinI2C0SCL | pinSPI1CSn,
+                                 /*10*/ pinI2C1SDA | pinSPI1SCK,                    pinI2C1SCL | pinSPI1TX,                 pinI2C0SDA | pinSPI1RX,                 pinI2C0SCL | pinSPI1CSn,                pinI2C1SDA | pinSPI1SCK,
+                                 /*15*/ pinI2C1SCL | pinSPI1TX,                     pinI2C0SDA | pinSPI0RX,                 pinI2C0SCL | pinSPI0CSn,                pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,
+                                 /*20*/ pinI2C0SDA | pinSPI0RX,                     pinI2C0SCL | pinSPI0CSn,                pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,                 pinI2C0SDA | pinSPI1RX,
+                                 /*25*/ pinI2C0SCL | pinSPI1CSn,                    pinI2C1SDA | pinSPI1SCK | pinHasADC,    pinI2C1SCL | pinSPI1TX  | pinHasADC,    pinI2C0SDA | pinSPI1RX | pinHasADC,     pinI2C0SCL | pinSPI1CSn | pinHasADC,
+                                 /*30*/ pinI2C1SDA | pinSPI1SCK,                    pinI2C1SCL | pinSPI1TX,                 pinI2C0SDA | pinSPI0RX,                 pinI2C0SCL | pinSPI0CSn,                pinI2C1SDA | pinSPI0SCK,
+                                 /*35*/ pinI2C1SCL | pinSPI0TX,                     pinI2C0SDA | pinSPI0RX,                 pinI2C0SCL | pinSPI0CSn,                pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,
+                                 /*40*/ pinI2C0SDA | pinSPI1RX  | pinHasADC,        pinI2C0SCL | pinSPI1CSn | pinHasADC,    pinI2C1SDA | pinSPI1SCK | pinHasADC,    pinI2C1SCL | pinSPI1TX | pinHasADC,     pinI2C0SDA | pinSPI1RX  | pinHasADC,
+                                 /*45*/ pinI2C0SCL | pinSPI1CSn | pinHasADC,        pinI2C1SDA | pinSPI1SCK | pinHasADC,    pinI2C1SCL | pinSPI1TX  | pinHasADC                                                                                      }},
+        //====================================================
+        // Base Microcontroller: ESP32
+        // *To be filled out by someone that knows how this board works
+
+        //====================================================
+        // Board Overrides: Raspberry Pi Pico (Non-/W)
+        // Some pins that should have I2C or SPI functions apparently aren't allowed on rpipico(w)?
+        {"rpipico",             {/*00*/ pinI2C0SDA | pinSPI0RX,     pinI2C0SCL | pinSPI0CSn,                pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,                 pinI2C0SDA | pinSPI0RX,
+                                 /*05*/ pinI2C0SCL | pinSPI0CSn,    pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,                 pinI2C0SDA | pinSPI1RX,                 pinI2C0SCL | pinSPI1CSn,
+                                 /*10*/ pinI2C1SDA | pinSPI1SCK,    pinI2C1SCL | pinSPI1TX,                 pinI2C0SDA | pinSPI1RX,                 pinI2C0SCL | pinSPI1CSn,                pinI2C1SDA | pinSPI1SCK,
+                                 /*15*/ pinI2C1SCL | pinSPI1TX,     pinI2C0SDA | pinSPI0RX,                 pinI2C0SCL | pinSPI0CSn,                pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,
+                                 /*20*/ pinI2C0SDA | pinSPI0RX,     pinI2C0SCL | pinSPI0CSn,                pinDigital,                             pinDigital,                             pinDigital,
+                                 /*25*/ pinDigital,                 pinI2C1SDA | pinSPI1SCK | pinHasADC,    pinI2C1SCL | pinSPI1TX | pinHasADC,     pinSPI1RX  | pinHasADC,                 pinDigital                  }},
+        {"rpipicow",            {/*00*/ pinI2C0SDA | pinSPI0RX,     pinI2C0SCL | pinSPI0CSn,                pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,                 pinI2C0SDA | pinSPI0RX,
+                                 /*05*/ pinI2C0SCL | pinSPI0CSn,    pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,                 pinI2C0SDA | pinSPI1RX,                 pinI2C0SCL | pinSPI1CSn,
+                                 /*10*/ pinI2C1SDA | pinSPI1SCK,    pinI2C1SCL | pinSPI1TX,                 pinI2C0SDA | pinSPI1RX,                 pinI2C0SCL | pinSPI1CSn,                pinI2C1SDA | pinSPI1SCK,
+                                 /*15*/ pinI2C1SCL | pinSPI1TX,     pinI2C0SDA | pinSPI0RX,                 pinI2C0SCL | pinSPI0CSn,                pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,
+                                 /*20*/ pinI2C0SDA | pinSPI0RX,     pinI2C0SCL | pinSPI0CSn,                pinDigital,                             pinDigital,                             pinDigital,
+                                 /*25*/ pinDigital,                 pinI2C1SDA | pinSPI1SCK | pinHasADC,    pinI2C1SCL | pinSPI1TX | pinHasADC,     pinSPI1RX  | pinHasADC,                 pinDigital                  }},
+        };
+
+    enum {
+        posNothing  = 0,
+        posLeft     = 0b00000001 << 8,
+        posRight    = 0b00000010 << 8,
+        posMiddle   = 0b00000100 << 8,
+        posCheck    = posLeft | posRight | posMiddle
     } boardBoxPositions_e;
 
     /// @brief      Map of graphical placement for each pin in the application
     /// @details    Key = board, int vector maps to microcontroller GPIO.
     ///             Each pin should be a combination of grid layout slot it should be in,
-    ///             added by the grid it should belong to.
+    ///             OR'd by the grid it should belong to.
     ///             Unexposed pins should use only posNothing (0).
     ///             (Yep, bitpacking! Three least significant bits of the second byte determine left/right/under position)
     ///             (If anyone is aware of a better way of doing this, please let me know/send a PR!)
     const std::unordered_map<std::string, std::vector<unsigned int>> boardsBoxPositions = {
-        //=====================================================================================================
+        //=====================================================================================================================
         // Raspberry Pi Pico: 15 pins left, rest of the pins right. Mostly linear order save for the reserved pins.
-        // Notes: rpi boards do not expose pins 23-25; pin 29/A3 is used for builtin chipset temp monitor
-        {"rpipico",             {   1+posLeft,     2+posLeft,      4+posLeft,      5+posLeft,      6+posLeft,
-                                    7+posLeft,     9+posLeft,      10+posLeft,     11+posLeft,     12+posLeft,
-                                    14+posLeft,    15+posLeft,     16+posLeft,     17+posLeft,     19+posLeft,
-                                    20+posLeft,    20+posRight,    19+posRight,    17+posRight,    16+posRight,
-                                    15+posRight,   14+posRight,    12+posRight,    posNothing,     posNothing,
-                                    posNothing,    10+posRight,    9+posRight,     7+posRight,     posNothing}},
-        //=====================================================================================================
+        // Board Type: RP2040
+        // Notes: Raspberry Pi boards do not expose pins 23-25; pin 29/A3 is used for builtin chipset temp monitor
+        {"rpipico",                 {/*00*/ 1  | posLeft,   2  | posLeft,   4  | posLeft,   5  | posLeft,   6  | posLeft,
+                                     /*05*/ 7  | posLeft,   9  | posLeft,   10 | posLeft,   11 | posLeft,   12 | posLeft,
+                                     /*10*/ 14 | posLeft,   15 | posLeft,   16 | posLeft,   17 | posLeft,   19 | posLeft,
+                                     /*15*/ 20 | posLeft,   20 | posRight,  19 | posRight,  17 | posRight,  16 | posRight,
+                                     /*20*/ 15 | posRight,  14 | posRight,  12 | posRight,    posNothing,     posNothing,
+                                     /*25*/   posNothing,   10 | posRight,  9  | posRight,  7  | posRight,    posNothing    }},
+        //=====================================================================================================================
         // Raspberry Pi Pico W: same as non-W Pico.
-        // Notes: rpi boards do not expose pins 23-25; pin 29/A3 is used for builtin chipset temp monitor
-        {"rpipicow",            {   1+posLeft,     2+posLeft,      4+posLeft,      5+posLeft,      6+posLeft,
-                                    7+posLeft,     9+posLeft,      10+posLeft,     11+posLeft,     12+posLeft,
-                                    14+posLeft,    15+posLeft,     16+posLeft,     17+posLeft,     19+posLeft,
-                                    20+posLeft,    20+posRight,    19+posRight,    17+posRight,    16+posRight,
-                                    15+posRight,   14+posRight,    12+posRight,    posNothing,     posNothing,
-                                    posNothing,    10+posRight,    9+posRight,     7+posRight,     posNothing}},
-        //=====================================================================================================
+        // Board Type: RP2040
+        // Notes: Raspberry Pi boards do not expose pins 23-25; pin 29/A3 is used for builtin chipset temp monitor
+        {"rpipicow",                {/*00*/ 1  | posLeft,   2  | posLeft,   4  | posLeft,   5  | posLeft,   6  | posLeft,
+                                     /*05*/ 7  | posLeft,   9  | posLeft,   10 | posLeft,   11 | posLeft,   12 | posLeft,
+                                     /*10*/ 14 | posLeft,   15 | posLeft,   16 | posLeft,   17 | posLeft,   19 | posLeft,
+                                     /*15*/ 20 | posLeft,   20 | posRight,  19 | posRight,  17 | posRight,  16 | posRight,
+                                     /*20*/ 15 | posRight,  14 | posRight,  12 | posRight,    posNothing,     posNothing,
+                                     /*25*/   posNothing,   10 | posRight,  9  | posRight,  7  | posRight,    posNothing    }},
+        //=====================================================================================================================
         // Adafruit ItsyBitsy RP2040: A very cluttered and kind of unfriendly layout tbh :(
+        // Board Type: RP2040
         // Notes: pins 13-17 & 21-23 are unexposed
-        {"adafruitItsyRP2040",  {   13+posRight,   14+posRight,    12+posRight,    11+posRight,    2+posMiddle,
-                                    1+posMiddle,   9+posRight,     8+posRight,     7+posRight,     6+posRight,
-                                    5+posRight,    4+posRight,     14+posLeft,     posNothing,     posNothing,
-                                    posNothing,    posNothing,     posNothing,     11+posLeft,     12+posLeft,
-                                    13+posLeft,    posNothing,     posNothing,     posNothing,     9+posLeft,
-                                    10+posLeft,    5+posLeft,      6+posLeft,      7+posLeft,      8+posLeft}},
-        //=====================================================================================================
+        {"adafruitItsyRP2040",      {/*00*/ 13 | posRight,  14 | posRight,  12 | posRight,  11 | posRight,  2  | posMiddle,
+                                     /*05*/ 1  | posMiddle, 9  | posRight,  8  | posRight,  7  | posRight,  6  | posRight,
+                                     /*10*/ 5  | posRight,  4  | posRight,  14 | posLeft,     posNothing,     posNothing,
+                                     /*15*/   posNothing,     posNothing,     posNothing,   11 | posLeft,   12 | posLeft,
+                                     /*20*/ 13 | posLeft,     posNothing,     posNothing,     posNothing,   9  | posLeft,
+                                     /*25*/ 10 | posLeft,   5  | posLeft,   6  | posLeft,   7  | posLeft,   8  | posLeft    }},
+        //=====================================================================================================================
         // Adafruit KB2040: Like the Itsy with more padding.
+        // Board Type: RP2040
         // Notes: pins 11-17 & 21-25 are unexposed
-        {"adafruitKB2040",      {   3+posLeft,     4+posLeft,      7+posLeft,      8+posLeft,      9+posLeft,
-                                    10+posLeft,    11+posLeft,     12+posLeft,     13+posLeft,     14+posLeft,
-                                    14+posRight,   posNothing,     posNothing,     posNothing,     posNothing,
-                                    posNothing,    posNothing,     posNothing,     11+posRight,    13+posRight,
-                                    12+posRight,   posNothing,     posNothing,     posNothing,     posNothing,
-                                    posNothing,    10+posRight,    9+posRight,     8+posRight,     7+posRight}},
-        //=====================================================================================================
-        // Arduino Nano RP2040: gweh
+        {"adafruitKB2040",          {/*00*/ 3  | posLeft,   4  | posLeft,   7  | posLeft,   8  | posLeft,   9  | posLeft,
+                                     /*05*/ 10 | posLeft,   11 | posLeft,   12 | posLeft,   13 | posLeft,   14 | posLeft,
+                                     /*10*/ 14 | posRight,    posNothing,     posNothing,     posNothing,     posNothing,
+                                     /*15*/   posNothing,     posNothing,     posNothing,   11 | posRight,  13 | posRight,
+                                     /*20*/ 12 | posRight,    posNothing,     posNothing,     posNothing,     posNothing,
+                                     /*25*/   posNothing,   10 | posRight,  9  | posRight,  8  | posRight,  7  | posRight   }},
+        //=====================================================================================================================
+        // Arduino Nano RP2040
+        // Board Type: RP2040
         // Notes: pins 2-3, 8-11, 14, & 22-24 are unexposed;
         //        some other pins are analog, but controlled by NINA and thus are unavailable in OpenFIRE for the moment
-        {"arduinoNanoRP2040",   {   18+posRight,   17+posRight,    posNothing,     posNothing,     4+posRight,
-                                    6+posRight,    4+posLeft,      5+posRight,     posNothing,     posNothing,
-                                    posNothing,    posNothing,     11+posLeft,     12+posLeft,     posNothing,
-                                    13+posRight,   12+posRight,    11+posRight,    10+posRight,    9+posRight,
-                                    8+posRight,    7+posRight,     posNothing,     posNothing,     posNothing,
-                                    14+posRight,   7+posLeft,      8+posLeft,      9+posLeft,      10+posLeft}},
-        //=====================================================================================================
+        {"arduinoNanoRP2040",       {/*00*/ 18 | posRight,  17 | posRight,    posNothing,     posNothing,   4  | posRight,
+                                     /*05*/ 6  | posRight,  4  | posLeft,   5  | posRight,    posNothing,     posNothing,
+                                     /*10*/   posNothing,     posNothing,   11 | posLeft,   12 | posLeft,     posNothing,
+                                     /*15*/ 13 | posRight,  12 | posRight,  11 | posRight,  10 | posRight,  9  | posRight,
+                                     /*20*/ 8  | posRight,  7  | posRight,    posNothing,     posNothing,     posNothing,
+                                     /*25*/ 14 | posRight,  7  | posLeft,   8  | posLeft,   9  | posLeft,   10 | posLeft    }},
+        //=====================================================================================================================
         // Waveshare Zero RP2040: Clockwise layout
+        // Board Type: RP2040
         // Note: pin 16 is reserved for the board's builtin NeoPixel (not currently used?);
         //       pins 17-25 are underside pads which are not exposed in the app for layout reasons;
-        {"waveshareZero",       {   2+posRight,    3+posRight,     4+posRight,     5+posRight,     6+posRight,
-                                    7+posRight,    8+posRight,     9+posRight,     10+posRight,    11+posRight,
-                                    3+posMiddle,   2+posMiddle,    11+posLeft,     10+posLeft,     9+posLeft,
-                                    8+posLeft,     posNothing,     posNothing,     posNothing,     posNothing,
-                                    posNothing,    posNothing,     posNothing,     posNothing,     posNothing,
-                                    posNothing,    7+posLeft,      6+posLeft,      5+posLeft,      4+posLeft}},
-        //=====================================================================================================
+        {"waveshareZero",           {/*00*/ 2  | posRight,  3  | posRight,  4  | posRight,  5  | posRight,  6  | posRight,
+                                     /*00*/ 7  | posRight,  8  | posRight,  9  | posRight,  10 | posRight,  11 | posRight,
+                                     /*00*/ 3  | posMiddle, 2  | posMiddle, 11 | posLeft,   10 | posLeft,   9  | posLeft,
+                                     /*00*/ 8  | posLeft,     posNothing,     posNothing,     posNothing,     posNothing,
+                                     /*00*/   posNothing,     posNothing,     posNothing,     posNothing,     posNothing,
+                                     /*00*/   posNothing,   7  | posLeft,   6  | posLeft,   5  | posLeft,   4  | posLeft    }},
+        //=====================================================================================================================
+        // Espressif ESP32 S3 WROOM-1 DevkitC-1 N16R8
+        // Board Type: ESP32
+        {"esp32-s3-devkitc-1",      {/*00*/   posNothing,   19 | posLeft,   18 | posLeft,     posNothing,   19 | posRight,
+                                     /*05*/ 18 | posRight,  17 | posRight,    posNothing,   11 | posRight,  8  | posRight,
+                                     /*10*/   posNothing,     posNothing,     posNothing,     posNothing,     posNothing,
+                                     /*15*/ 15 | posRight,  14 | posRight,  13 | posRight,  12 | posRight,    posNothing,
+                                     /*20*/   posNothing,   5  | posLeft,     posNothing,     posNothing,     posNothing,
+                                     /*25*/   posNothing,     posNothing,     posNothing,     posNothing,     posNothing,
+                                     /*30*/   posNothing,     posNothing,     posNothing,     posNothing,     posNothing,
+                                     /*35*/ 10 | posLeft,   11 | posLeft,   12 | posLeft,   13 | posLeft,   14 | posLeft,
+                                     /*40*/ 15 | posLeft,   16 | posLeft,   17 | posLeft,     posNothing,     posNothing,
+                                     /*45*/ 8  | posLeft,     posNothing,   6  | posLeft,   7  | posLeft,     posNothing    }},
+        //=====================================================================================================================
+        // Waveshare ESP32 S3 Pico
+        // Notes: ESP32          /*xx*/ indicates the number of the GPIO es. /*02*/ for GPIO2
+        {"waveshare-esp32-s3-pico", {/*00*/   posNothing,   17 | posRight,  16 | posRight,    posNothing,   15 | posRight,
+                                     /*05*/ 14 | posRight,  12 | posRight,  10 | posRight,  9  | posRight,  7  | posRight,
+                                     /*10*/ 6  | posRight,  1  | posLeft,   2  | posLeft,   4  | posLeft,   5  | posLeft,
+                                     /*15*/ 6  | posLeft,   7  | posLeft,   9  | posLeft,   10 | posLeft,     posNothing,
+                                     /*20*/   posNothing,     posNothing,     posNothing,     posNothing,     posNothing,
+                                     /*25*/   posNothing,     posNothing,     posNothing,     posNothing,     posNothing,
+                                     /*30*/   posNothing,     posNothing,     posNothing,   11 | posLeft,   12 | posLeft,
+                                     /*35*/ 14 | posLeft,   15 | posLeft,   16 | posLeft,   17 | posLeft,   19 | posLeft,
+                                     /*40*/ 20 | posLeft,   19 | posRight,  20 | posRight,    posNothing,     posNothing,
+                                     /*45*/   posNothing,     posNothing,     posNothing,     posNothing,     posNothing    }},
+        //=====================================================================================================================
         // Insert new layouts below this one!
         // Feel free to use any of the above as a template.
         // ***
 
 
-        //=====================================================================================================
-        // Esp32 S3 Devkitc 1
-        // Notes: Esp32          /*xx*/ indicates the number of the GPIO es. /*02*/ for GPIO2
-        {"esp32-s3-devkitc-1",         {/*00*/posNothing,    /*01*/19+posLeft,     /*02*/18+posLeft,     /*03*/posNothing,     /*04*/19+posRight,
-                                        /*05*/18+posRight,   /*06*/17+posRight,    /*07*/posNothing,     /*08*/11+posRight,    /*09*/8+posRight,
-                                        /*10*/posNothing,    /*11*/posNothing,     /*12*/posNothing,     /*13*/posNothing,     /*14*/posNothing,
-                                        /*15*/15+posRight,   /*16*/14+posRight,    /*17*/13+posRight,    /*18*/12+posRight,    /*19*/posNothing,
-                                        /*20*/posNothing,    /*21*/5+posLeft,      /*22*/posNothing,     /*23*/posNothing,     /*24*/posNothing,
-                                        /*25*/posNothing,    /*26*/posNothing,     /*27*/posNothing,     /*28*/posNothing,     /*29*/posNothing,
-                                        /*30*/posNothing,    /*31*/posNothing,     /*32*/posNothing,     /*33*/posNothing,     /*34*/posNothing,
-                                        /*35*/10+posLeft,    /*36*/11+posLeft,     /*37*/12+posLeft,     /*38*/13+posLeft,     /*39*/14+posLeft,
-                                        /*40*/15+posLeft,    /*41*/16+posLeft,     /*42*/17+posLeft,     /*43*/posNothing,     /*44*/posNothing,
-                                        /*45*/8+posLeft,     /*46*/posNothing,     /*47*/6+posLeft,      /*48*/7+posLeft,      /*49*/posNothing}},
-        //=====================================================================================================
-        //=====================================================================================================
-        // Notes: ESP32          /*xx*/ indicates the number of the GPIO es. /*02*/ for GPIO2
-        {"waveshare-esp32-s3-pico",    {/*00*/posNothing,    /*01*/17+posRight,    /*02*/16+posRight,    /*03*/posNothing,     /*04*/15+posRight,
-                                        /*05*/14+posRight,   /*06*/12+posRight,    /*07*/10+posRight,    /*08*/9+posRight,     /*09*/7+posRight,
-                                        /*10*/6+posRight,    /*11*/1+posLeft,      /*12*/2+posLeft,      /*13*/4+posLeft,      /*14*/5+posLeft,
-                                        /*15*/6+posLeft,     /*16*/7+posLeft,      /*17*/9+posLeft,      /*18*/10+posLeft,     /*19*/posNothing,
-                                        /*20*/posNothing,    /*21*/posNothing,     /*22*/posNothing,     /*23*/posNothing,     /*24*/posNothing,
-                                        /*25*/posNothing,    /*26*/posNothing,     /*27*/posNothing,     /*28*/posNothing,     /*29*/posNothing,
-                                        /*30*/posNothing,    /*31*/posNothing,     /*32*/posNothing,     /*33*/11+posLeft,     /*34*/12+posLeft,
-                                        /*35*/14+posLeft,    /*36*/15+posLeft,     /*37*/16+posLeft,     /*38*/17+posLeft,     /*39*/19+posLeft,
-                                        /*40*/20+posLeft,    /*41*/19+posRight,    /*42*/20+posRight,    /*43*/posNothing,     /*44*/posNothing,
-                                        /*45*/posNothing,    /*46*/posNothing,     /*47*/posNothing,     /*48*/posNothing,     /*49*/posNothing}},
-//=====================================================================================================
-        //=====================================================================================================
-        // Generic layout
+        //=====================================================================================================================
+        // Generic (RP2040/2350A) layout
         // Just reveal all pins; user assumes full responsibility if something goes wrong here
-        {"generic",             {   1+posLeft,     2+posLeft,      3+posLeft,      4+posLeft,      5+posLeft,
-                                    6+posLeft,     7+posLeft,      8+posLeft,      9+posLeft,      10+posLeft,
-                                    11+posLeft,    12+posLeft,     13+posLeft,     14+posLeft,     15+posLeft,
-                                    16+posLeft,    16+posRight,    15+posRight,    14+posRight,    13+posRight,
-                                    12+posRight,   11+posRight,    10+posRight,    9+posRight,     8+posRight,
-                                    7+posRight,    6+posRight,     5+posRight,     4+posRight,     3+posRight}}
+        {"generic",                 {/*00*/ 1  | posLeft,   2  | posLeft,   3  | posLeft,   4  | posLeft,   5  | posLeft,
+                                     /*00*/ 6  | posLeft,   7  | posLeft,   8  | posLeft,   9  | posLeft,   10 | posLeft,
+                                     /*00*/ 11 | posLeft,   12 | posLeft,   13 | posLeft,   14 | posLeft,   15 | posLeft,
+                                     /*00*/ 16 | posLeft,   16 | posRight,  15 | posRight,  14 | posRight,  13 | posRight,
+                                     /*00*/ 12 | posRight,  11 | posRight,  10 | posRight,  9  | posRight,  8  | posRight,
+                                     /*00*/ 7  | posRight,  6  | posRight,  5  | posRight,  4  | posRight,  3  | posRight   }}
     };
 
     typedef struct {
@@ -575,41 +671,41 @@ public:
         // Raspberry Pi Pico Presets (currently a test)
         // Notes: rpi boards do not expose pins 23-25; pin 29/A3 is used for builtin chipset temp monitor
         /*
-        {"rpipico",             {"Test",
-                                {   btnPump,       btnPedal,       btnUnmapped,    btnUnmapped,    btnUnmapped,
-                                    btnUnmapped,   btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
-                                    btnUnmapped,   btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
-                                    btnUnmapped,   btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
-                                    btnUnmapped,   btnUnmapped,    btnUnmapped,    unavailable,    unavailable,
-                                    unavailable,   btnUnmapped,    btnUnmapped,    btnUnmapped,    unavailable}}},
+        {"rpipico",                 {"Test",
+                                    {   btnPump,       btnPedal,       btnUnmapped,    btnUnmapped,    btnUnmapped,
+                                        btnUnmapped,   btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
+                                        btnUnmapped,   btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
+                                        btnUnmapped,   btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
+                                        btnUnmapped,   btnUnmapped,    btnUnmapped,    unavailable,    unavailable,
+                                        unavailable,   btnUnmapped,    btnUnmapped,    btnUnmapped,    unavailable}}},
 
-        {"rpipico",             {"Test 2",
-                                {   btnGunA,       btnTrigger,     btnUnmapped,    btnUnmapped,    btnUnmapped,
-                                    btnUnmapped,   btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
-                                    btnUnmapped,   btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
-                                    btnUnmapped,   btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
-                                    btnUnmapped,   btnUnmapped,    btnUnmapped,    unavailable,    unavailable,
-                                    unavailable,   btnUnmapped,    btnUnmapped,    btnUnmapped,    unavailable}}},
+        {"rpipico",                 {"Test 2",
+                                    {   btnGunA,       btnTrigger,     btnUnmapped,    btnUnmapped,    btnUnmapped,
+                                        btnUnmapped,   btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
+                                        btnUnmapped,   btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
+                                        btnUnmapped,   btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
+                                        btnUnmapped,   btnUnmapped,    btnUnmapped,    unavailable,    unavailable,
+                                        unavailable,   btnUnmapped,    btnUnmapped,    btnUnmapped,    unavailable}}},
         */
 
         //=====================================================================================================
         // Adafruit ItsyBitsy RP2040 Presets
         // Notes: pins 13-17 & 21-23 are unexposed
-        {"adafruitItsyRP2040",  {"SAMCO 2.0 (Btn C as Home)",
-                                {   btnUnmapped,   btnUnmapped,    camSDA,         camSCL,         btnPedal,
-                                    btnUnmapped,   btnTrigger,     btnGunDown,     btnGunLeft,     btnGunUp,
-                                    btnGunRight,   btnHome,        btnUnmapped,    unavailable,    unavailable,
-                                    unavailable,   unavailable,    unavailable,    btnUnmapped,    btnUnmapped,
-                                    btnUnmapped,   unavailable,    unavailable,    unavailable,    rumblePin,
-                                    solenoidPin,   btnGunB,        btnGunA,        btnStart,       btnSelect}}},
+        {"adafruitItsyRP2040",      {"SAMCO 2.0 (Btn C as Home)",
+                                    {   btnUnmapped,   btnUnmapped,    camSDA,         camSCL,         btnPedal,
+                                        btnUnmapped,   btnTrigger,     btnGunDown,     btnGunLeft,     btnGunUp,
+                                        btnGunRight,   btnHome,        btnUnmapped,    unavailable,    unavailable,
+                                        unavailable,   unavailable,    unavailable,    btnUnmapped,    btnUnmapped,
+                                        btnUnmapped,   unavailable,    unavailable,    unavailable,    rumblePin,
+                                        solenoidPin,   btnGunB,        btnGunA,        btnStart,       btnSelect}}},
 
-        {"adafruitItsyRP2040",  {"SAMCO 1.1",
-                                {   btnUnmapped,   btnUnmapped,    camSDA,         camSCL,         btnUnmapped,
-                                    btnUnmapped,   btnGunA,        btnGunB,        rumblePin,      btnHome,
-                                    btnTrigger,    btnUnmapped,    btnUnmapped,    unavailable,    unavailable,
-                                    unavailable,   unavailable,    unavailable,    btnUnmapped,    btnUnmapped,
-                                    btnUnmapped,   unavailable,    unavailable,    unavailable,    btnUnmapped,
-                                    btnUnmapped,   btnUnmapped,    btnPedal,       btnUnmapped,    btnUnmapped}}},
+        {"adafruitItsyRP2040",      {"SAMCO 1.1",
+                                    {   btnUnmapped,   btnUnmapped,    camSDA,         camSCL,         btnUnmapped,
+                                        btnUnmapped,   btnGunA,        btnGunB,        rumblePin,      btnHome,
+                                        btnTrigger,    btnUnmapped,    btnUnmapped,    unavailable,    unavailable,
+                                        unavailable,   unavailable,    unavailable,    btnUnmapped,    btnUnmapped,
+                                        btnUnmapped,   unavailable,    unavailable,    unavailable,    btnUnmapped,
+                                        btnUnmapped,   btnUnmapped,    btnPedal,       btnUnmapped,    btnUnmapped}}},
     };
 
 #endif
