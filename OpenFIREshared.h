@@ -497,7 +497,9 @@ public:
         // check if SCL, else SDA
         pinIsI2CSCL = 1 << 2,
         // check if I2C1, else I2C0
-        pinIsI2C1   = 1 << 3
+        pinIsI2C1   = 1 << 3,
+        // check if SPI1, else SPI0
+        pinIsSPI1   = 1 << 4
     } pinCapabilities_e;
 
     /// @brief      Map of capabilities of each pin for a board type
@@ -519,17 +521,57 @@ public:
                                  /*45*/ pinI2C0SCL | pinSPI1CSn | pinHasADC,        pinI2C1SDA | pinSPI1SCK | pinHasADC,    pinI2C1SCL | pinSPI1TX  | pinHasADC                                                                                      }},
         //====================================================
         // Base Microcontroller: ESP32
-        // *To be filled out by someone that knows how this board works
-        {boardArchs[boardESP32],{/*00*/ pinI2C0SDA | pinSPI0RX,                     pinI2C0SCL | pinSPI0CSn,                pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,                 pinI2C0SDA | pinSPI0RX,
-                                 /*05*/ pinI2C0SCL | pinSPI0CSn,                    pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,                 pinI2C0SDA | pinSPI1RX,                 pinI2C0SCL | pinSPI1CSn,
-                                 /*10*/ pinI2C1SDA | pinSPI1SCK,                    pinI2C1SCL | pinSPI1TX,                 pinI2C0SDA | pinSPI1RX,                 pinI2C0SCL | pinSPI1CSn,                pinI2C1SDA | pinSPI1SCK,
-                                 /*15*/ pinI2C1SCL | pinSPI1TX,                     pinI2C0SDA | pinSPI0RX,                 pinI2C0SCL | pinSPI0CSn,                pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,
-                                 /*20*/ pinI2C0SDA | pinSPI0RX,                     pinI2C0SCL | pinSPI0CSn,                pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,                 pinI2C0SDA | pinSPI1RX,
-                                 /*25*/ pinI2C0SCL | pinSPI1CSn,                    pinI2C1SDA | pinSPI1SCK | pinHasADC,    pinI2C1SCL | pinSPI1TX  | pinHasADC,    pinI2C0SDA | pinSPI1RX | pinHasADC,     pinI2C0SCL | pinSPI1CSn | pinHasADC,
-                                 /*30*/ pinI2C1SDA | pinSPI1SCK,                    pinI2C1SCL | pinSPI1TX,                 pinI2C0SDA | pinSPI0RX,                 pinI2C0SCL | pinSPI0CSn,                pinI2C1SDA | pinSPI0SCK,
-                                 /*35*/ pinI2C1SCL | pinSPI0TX,                     pinI2C0SDA | pinSPI0RX,                 pinI2C0SCL | pinSPI0CSn,                pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,
-                                 /*40*/ pinI2C0SDA | pinSPI1RX  | pinHasADC,        pinI2C0SCL | pinSPI1CSn | pinHasADC,    pinI2C1SDA | pinSPI1SCK | pinHasADC,    pinI2C1SCL | pinSPI1TX | pinHasADC,     pinI2C0SDA | pinSPI1RX  | pinHasADC,
-                                 /*45*/ pinI2C0SCL | pinSPI1CSn | pinHasADC,        pinI2C1SDA | pinSPI1SCK | pinHasADC,    pinI2C1SCL | pinSPI1TX  | pinHasADC                                                                                      }},
+        // esp32s3 has two ADC, ADC1 (10 channels (GPIO1 – GPIO10)) e ADC2 (10 channels (GPIO11 – GPIO20)). ADC2 has some handicaps because it is also used by the Wi-Fi module
+        {boardArchs[boardESP32],{/*00*/ pinI2C0SDA | pinSPI0RX,                     
+                                        pinI2C0SCL | pinSPI0CSn | pinHasADC,    
+                                        pinI2C1SDA | pinSPI0SCK | pinHasADC,    
+                                        pinI2C1SCL | pinSPI0TX | pinHasADC,     
+                                        pinI2C0SDA | pinSPI0RX | pinHasADC,
+                                 /*05*/ pinI2C0SCL | pinSPI0CSn | pinHasADC,        
+                                        pinI2C1SDA | pinSPI0SCK | pinHasADC,    
+                                        pinI2C1SCL | pinSPI0TX | pinHasADC,     
+                                        pinI2C0SDA | pinSPI1RX | pinHasADC,     
+                                        pinI2C0SCL | pinSPI1CSn | pinHasADC,
+                                 /*10*/ pinI2C1SDA | pinSPI1SCK | pinHasADC,        
+                                        pinI2C1SCL | pinSPI1TX,                 
+                                        pinI2C0SDA | pinSPI1RX,                 
+                                        pinI2C0SCL | pinSPI1CSn,                
+                                        pinI2C1SDA | pinSPI1SCK,
+                                 /*15*/ pinI2C1SCL | pinSPI1TX,                     
+                                        pinI2C0SDA | pinSPI0RX,                 
+                                        pinI2C0SCL | pinSPI0CSn,                
+                                        pinI2C1SDA | pinSPI0SCK,                
+                                        pinI2C1SCL | pinSPI0TX,
+                                 /*20*/ pinI2C0SDA | pinSPI0RX,                     
+                                        pinI2C0SCL | pinSPI0CSn,                
+                                        pinI2C1SDA | pinSPI0SCK,                
+                                        pinI2C1SCL | pinSPI0TX,                 
+                                        pinI2C0SDA | pinSPI1RX,
+                                 /*25*/ pinI2C0SCL | pinSPI1CSn,                    
+                                        pinI2C1SDA | pinSPI1SCK,                
+                                        pinI2C1SCL | pinSPI1TX,                 
+                                        pinI2C0SDA | pinSPI1RX,                 
+                                        pinI2C0SCL | pinSPI1CSn,
+                                 /*30*/ pinI2C1SDA | pinSPI1SCK,                    
+                                        pinI2C1SCL | pinSPI1TX,                 
+                                        pinI2C0SDA | pinSPI0RX,                 
+                                        pinI2C0SCL | pinSPI0CSn,                
+                                        pinI2C1SDA | pinSPI0SCK,
+                                 /*35*/ pinI2C1SCL | pinSPI0TX,                     
+                                        pinI2C0SDA | pinSPI0RX,                 
+                                        pinI2C0SCL | pinSPI0CSn,                
+                                        pinI2C1SDA | pinSPI0SCK,                
+                                        pinI2C1SCL | pinSPI0TX,
+                                 /*40*/ pinI2C0SDA | pinSPI1RX,                     
+                                        pinI2C0SCL | pinSPI1CSn,                
+                                        pinI2C1SDA | pinSPI1SCK,                
+                                        pinI2C1SCL | pinSPI1TX,                 
+                                        pinI2C0SDA | pinSPI1RX,
+                                 /*45*/ pinI2C0SCL | pinSPI1CSn,                    
+                                        pinI2C1SDA | pinSPI1SCK,                
+                                        pinI2C1SDA | pinSPI1SCK,                
+                                        pinI2C1SDA | pinSPI1SCK,                
+                                        pinI2C1SCL | pinSPI1TX }},
 
         //====================================================
         // Board Overrides: Raspberry Pi Pico (Non-/W)
