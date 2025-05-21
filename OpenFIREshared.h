@@ -83,6 +83,7 @@ public:
         ledR,
         ledG,
         ledB,
+        wiiClockGen,
         camSDA,
         camSCL,
         periphSDA,
@@ -90,7 +91,6 @@ public:
         analogX,
         analogY,
         tempPin,
-        wiiClockGen,
         // Add non-button inputs here
         boardInputsCount
     } boardInputs_e;
@@ -122,6 +122,7 @@ public:
         {"RGB LED Red",         ledR            },
         {"RGB LED Green",       ledG            },
         {"RGB LED Blue",        ledB            },
+        {"Wii Cam Clock",       wiiClockGen     },
         {"Camera SDA",          camSDA          },
         {"Camera SCL",          camSCL          },
         {"Peripherals SDA",     periphSDA       },
@@ -129,7 +130,6 @@ public:
         {"Analog Stick X",      analogX         },
         {"Analog Stick Y",      analogY         },
         {"Temperature Sensor",  tempPin         },
-        {"Wii Cam Clock",       wiiClockGen     },
     };
 
     // For Apps to use for lists of pin functions
@@ -304,12 +304,6 @@ public:
         sTestLEDG,
         sTestLEDB,
 
-        // 696969 inseriti provvesoriamente per abilitare disabilitare invio dati in modalità docked
-        sDockedSaving = 69,
-        sDockedSaving_on,
-        sDockedSaving_off,
-        // 696969 inseriti provvisoriamente
-
         // Error types from board (with sError)
         sErrCam = 0x80, // 128
         sErrPeriphGeneric,
@@ -339,6 +333,9 @@ public:
         sGetSettings,
         sGetProfile,
         sGetBtns,
+
+        // for non-RP2040 boards that don't have a magic number-type reset
+        sRebootToBootloader = 0xF0, // 245
 
         sError = 0xFA, // 250
         sSave = 0xFC, // 252
@@ -427,7 +424,7 @@ public:
                                      /*30*/ unavailable,    unavailable,    unavailable,    unavailable,    unavailable,
                                      /*35*/ btnHome,        btnGunA,        btnGunB,        btnSelect,      btnStart,
                                      /*40*/ btnGunUp,       btnGunDown,     btnGunLeft,     unavailable,    unavailable,
-                                     /*45*/ btnPump,        unavailable,    btnPedal,       neoPixel,       unavailable     }},
+                                     /*45*/ btnPump,        unavailable,    btnPedal,       neoPixel                        }},
         //=====================================================================================================================
         // Waveshare ESP32 S3 Pico
         // Board Type: ESP32
@@ -440,7 +437,7 @@ public:
                                      /*30*/ unavailable,    unavailable,    unavailable,    btnGunLeft,     btnGunRight,
                                      /*35*/ periphSDA,      periphSCL,      btnUnmapped,    btnPump,        btnPedal,
                                      /*40*/ btnTrigger,     rumblePin,      solenoidPin,    unavailable,    unavailable,
-                                     /*45*/ unavailable,    unavailable,    unavailable,    unavailable,    unavailable     }},
+                                     /*45*/ unavailable,    unavailable,    unavailable,    unavailable                     }},
         //=====================================================================================================================
     };
 
@@ -465,19 +462,20 @@ public:
     ///             to be used for defining which pins are capable of what.
     const char* boardArchs[2] = {
         "rp2040_235X",
-        "esp32"
+        "esp32-s3"
     };
 
     /// @brief      Indices for the boardArchs strings above
     enum {
         boardRP,
-        boardESP32
+        boardESP32_S3
     } boardArchs_e;
 
     /// @brief      Indices to be used as a bitmap for defining pin capabilities
     /// @note       Default (0) assumes the pin is digital only with no I2C or SPI capability
     enum {
         pinDigital = 0,          // macro for no special function at all
+        pinSystem  = 0,          // macro for pin that shouldn't be exposed to the user
         pinHasADC  = 0b00000001, // whether pin is connected to an ADC or not
         pinI2C0SDA = 0b00000010, // pin has I2C0 SDA
         pinI2C0SCL = 0b00000110, // pin has I2C0 SCL
@@ -491,7 +489,12 @@ public:
         pinSPI1TX  = 0b01010000, // pin has SPI1 TX
         pinSPI1SCK = 0b01110000, // pin has SPI1 SCK
         pinSPI1CSn = 0b10010000, // pin has SPI1 CSn
-        // to be used in Application
+        // ESP can software define I2C & SPI pins and their channels
+        // So just let them map any function from the app.
+        pinAnyI2C  = 0b00000001 << 8,
+        pinAnySPI  = 0b00000010 << 8,
+
+        // below are bitmasks to be used in Application
         pinCanSPI   = 0b11110000,
         pinCanI2C   = 1 << 1,
         // check if SCL, else SDA
@@ -508,7 +511,8 @@ public:
     const std::unordered_map<std::string, std::vector<int>> mcuCapableMaps = {
         //====================================================
         // Base Microcontroller: RP2040 & RP235X(A|B)
-        // Because RP235X-series shares the lower 30 GPIO, both RPI MCUs can share the same map
+        // GPIO: 30(RP2040/RP2350A) / 48(RP2350B)
+        // Notes: Because RP235X-series shares the lower 30 GPIO, both RPI MCUs can share the same map
         {boardArchs[boardRP],   {/*00*/ pinI2C0SDA | pinSPI0RX,                     pinI2C0SCL | pinSPI0CSn,                pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,                 pinI2C0SDA | pinSPI0RX,
                                  /*05*/ pinI2C0SCL | pinSPI0CSn,                    pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,                 pinI2C0SDA | pinSPI1RX,                 pinI2C0SCL | pinSPI1CSn,
                                  /*10*/ pinI2C1SDA | pinSPI1SCK,                    pinI2C1SCL | pinSPI1TX,                 pinI2C0SDA | pinSPI1RX,                 pinI2C0SCL | pinSPI1CSn,                pinI2C1SDA | pinSPI1SCK,
@@ -518,20 +522,23 @@ public:
                                  /*30*/ pinI2C1SDA | pinSPI1SCK,                    pinI2C1SCL | pinSPI1TX,                 pinI2C0SDA | pinSPI0RX,                 pinI2C0SCL | pinSPI0CSn,                pinI2C1SDA | pinSPI0SCK,
                                  /*35*/ pinI2C1SCL | pinSPI0TX,                     pinI2C0SDA | pinSPI0RX,                 pinI2C0SCL | pinSPI0CSn,                pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,
                                  /*40*/ pinI2C0SDA | pinSPI1RX  | pinHasADC,        pinI2C0SCL | pinSPI1CSn | pinHasADC,    pinI2C1SDA | pinSPI1SCK | pinHasADC,    pinI2C1SCL | pinSPI1TX | pinHasADC,     pinI2C0SDA | pinSPI1RX  | pinHasADC,
-                                 /*45*/ pinI2C0SCL | pinSPI1CSn | pinHasADC,        pinI2C1SDA | pinSPI1SCK | pinHasADC,    pinI2C1SCL | pinSPI1TX  | pinHasADC                                                                                      }},
+                                 /*45*/ pinI2C0SCL | pinSPI1CSn | pinHasADC,        pinI2C1SDA | pinSPI1SCK | pinHasADC,    pinI2C1SCL | pinSPI1TX  | pinHasADC                                                                                     }},
         //====================================================
-        // Base Microcontroller: ESP32
-        // esp32s3 has two ADC, ADC1 (10 channels (GPIO1 – GPIO10)) e ADC2 (10 channels (GPIO11 – GPIO20)). ADC2 has some handicaps because it is also used by the Wi-Fi module
-        {boardArchs[boardESP32],{/*00*/ pinDigital,                                 pinHasADC | pinI2C0SDA | pinI2C1SDA,    pinHasADC | pinI2C0SCL | pinI2C1SCL,    pinHasADC,                              pinHasADC | pinI2C0SDA | pinI2C1SDA,
-                                 /*05*/ pinHasADC | pinI2C0SCL | pinI2C1SCL,        pinHasADC,                              pinHasADC,                              pinHasADC | pinI2C0SDA | pinI2C1SDA,    pinHasADC | pinI2C0SCL | pinI2C1SCL,
-                                 /*10*/ pinHasADC | pinSPI0CSn | pinSPI1CSn,        pinSPI0TX | pinSPI1TX,                  pinSPI0SCK | pinSPI1SCK,                pinSPI0RX | pinSPI1RX,                  pinDigital,
-                                 /*15*/ pinI2C0SCL | pinI2C1SCL,                    pinDigital,                             pinDigital,                             pinI2C0SDA | pinI2C1SDA,                pinDigital,
-                                 /*20*/ pinDigital,                                 pinDigital,                             pinDigital,                             pinDigital,                             pinDigital,
-                                 /*25*/ pinDigital,                                 pinDigital,                             pinDigital,                             pinDigital,                             pinDigital,
-                                 /*30*/ pinDigital,                                 pinDigital,                             pinDigital,                             pinDigital,                             pinDigital,
-                                 /*35*/ pinI2C0SDA | pinI2C1SDA,                    pinI2C0SCL | pinI2C1SCL,                pinDigital,                             pinDigital,                             pinDigital,
-                                 /*40*/ pinDigital,                                 pinDigital,                             pinDigital,                             pinDigital,                             pinDigital,
-                                 /*45*/ pinDigital,                                 pinDigital,                             pinDigital,                             pinDigital,                             pinDigital                              }},
+        // Base Microcontroller: ESP32-S3
+        // GPIO: 49
+        // Notes: Only ADC1 (GP1-10) can reliably be used for user-mappable analog reading.
+        //        SPI0/1 (GP26-32) are reserved for the system, so only SPI2/3 are available for user mapping.
+        //        GP0, 3, & 45-46 are also system-reserved and shouldn't be exposed.
+        {boardArchs[boardESP32_S3],{/*00*/ pinSystem,                               pinHasADC | pinAnyI2C | pinAnySPI,      pinHasADC | pinAnyI2C | pinAnySPI,      pinSystem,                              pinHasADC | pinAnyI2C | pinAnySPI,
+                                    /*05*/ pinHasADC | pinAnyI2C | pinAnySPI,       pinHasADC | pinAnyI2C | pinAnySPI,      pinHasADC | pinAnyI2C | pinAnySPI,      pinHasADC | pinAnyI2C | pinAnySPI,      pinHasADC | pinAnyI2C | pinAnySPI,
+                                    /*10*/ pinHasADC | pinAnyI2C | pinAnySPI,       pinAnyI2C | pinAnySPI,                  pinAnyI2C | pinAnySPI,                  pinAnyI2C | pinAnySPI,                  pinAnyI2C | pinAnySPI,
+                                    /*15*/ pinAnyI2C | pinAnySPI,                   pinAnyI2C | pinAnySPI,                  pinAnyI2C | pinAnySPI,                  pinAnyI2C | pinAnySPI,                  pinAnyI2C | pinAnySPI,
+                                    /*20*/ pinAnyI2C | pinAnySPI,                   pinAnyI2C | pinAnySPI,                  pinAnyI2C | pinAnySPI,                  pinAnyI2C | pinAnySPI,                  pinAnyI2C | pinAnySPI,
+                                    /*25*/ pinAnyI2C | pinAnySPI,                   pinSystem,                              pinSystem,                              pinSystem,                              pinSystem,
+                                    /*30*/ pinSystem,                               pinSystem,                              pinSystem,                              pinAnyI2C | pinAnySPI,                  pinAnyI2C | pinAnySPI,
+                                    /*35*/ pinAnyI2C | pinAnySPI,                   pinAnyI2C | pinAnySPI,                  pinAnyI2C | pinAnySPI,                  pinAnyI2C | pinAnySPI,                  pinAnyI2C | pinAnySPI,
+                                    /*40*/ pinAnyI2C | pinAnySPI,                   pinAnyI2C | pinAnySPI,                  pinAnyI2C | pinAnySPI,                  pinAnyI2C | pinAnySPI,                  pinAnyI2C | pinAnySPI,
+                                    /*45*/ pinSystem,                               pinSystem,                              pinAnyI2C | pinAnySPI,                  pinAnyI2C | pinAnySPI                                                           }},
         //====================================================
         // Board Overrides: Raspberry Pi Pico (Non-/W)
         // Some pins that should have I2C or SPI functions apparently aren't allowed on rpipico(w)?
@@ -629,7 +636,7 @@ public:
                                      /*00*/   posNothing,   7  | posLeft,   6  | posLeft,   5  | posLeft,   4  | posLeft    }},
         //=====================================================================================================================
         // Espressif ESP32 S3 WROOM-1 DevkitC-1 N16R8
-        // Board Type: ESP32
+        // Board Type: ESP32-S3
         {"esp32-s3-devkitc-1",      {/*00*/   posNothing,   19 | posLeft,   18 | posLeft,     posNothing,   19 | posRight,
                                      /*05*/ 18 | posRight,  17 | posRight,    posNothing,   11 | posRight,  8  | posRight,
                                      /*10*/   posNothing,     posNothing,     posNothing,     posNothing,     posNothing,
@@ -639,10 +646,10 @@ public:
                                      /*30*/   posNothing,     posNothing,     posNothing,     posNothing,     posNothing,
                                      /*35*/ 10 | posLeft,   11 | posLeft,   12 | posLeft,   13 | posLeft,   14 | posLeft,
                                      /*40*/ 15 | posLeft,   16 | posLeft,   17 | posLeft,     posNothing,     posNothing,
-                                     /*45*/ 8  | posLeft,     posNothing,   6  | posLeft,   7  | posLeft,     posNothing    }},
+                                     /*45*/ 8  | posLeft,     posNothing,   6  | posLeft,   7  | posLeft                    }},
         //=====================================================================================================================
         // Waveshare ESP32 S3 Pico
-        // Notes: ESP32          /*xx*/ indicates the number of the GPIO es. /*02*/ for GPIO2
+        // Board Type: ESP32-S3
         {"waveshare-esp32-s3-pico", {/*00*/   posNothing,   17 | posRight,  16 | posRight,    posNothing,   15 | posRight,
                                      /*05*/ 14 | posRight,  12 | posRight,  10 | posRight,  9  | posRight,  7  | posRight,
                                      /*10*/ 6  | posRight,  1  | posLeft,   2  | posLeft,   4  | posLeft,   5  | posLeft,
@@ -652,7 +659,7 @@ public:
                                      /*30*/   posNothing,     posNothing,     posNothing,   11 | posLeft,   12 | posLeft,
                                      /*35*/ 14 | posLeft,   15 | posLeft,   16 | posLeft,   17 | posLeft,   19 | posLeft,
                                      /*40*/ 20 | posLeft,   19 | posRight,  20 | posRight,    posNothing,     posNothing,
-                                     /*45*/   posNothing,     posNothing,     posNothing,     posNothing,     posNothing    }},
+                                     /*45*/   posNothing,     posNothing,     posNothing,     posNothing                    }},
         //=====================================================================================================================
         // Insert new layouts below this one!
         // Feel free to use any of the above as a template.
