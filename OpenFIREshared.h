@@ -440,6 +440,8 @@ public:
                                      /*20*/ btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
                                      /*25*/ btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,    tempPin         }},
         //=====================================================================================================================
+        /* more RP-series boards should be added here */
+        //=====================================================================================================================
         // Espressif ESP32 S3 WROOM-1 DevkitC-1 N16R8
         // Board Type: ESP32
         {"esp32-s3-devkitc-1",      {/*00*/ unavailable,    btnTrigger,     btnGunRight,    btnUnmapped,    analogX,
@@ -466,6 +468,7 @@ public:
                                      /*40*/ btnTrigger,     rumblePin,      solenoidPin,    unavailable,    unavailable,
                                      /*45*/ unavailable,    unavailable,    unavailable,    unavailable                     }},
         //=====================================================================================================================
+        /* more ESP boards should be added here */
     };
 
 // Only needed for the Desktop App, don't build for microcontroller firmware!
@@ -697,6 +700,12 @@ public:
                                      /*00*/   posNothing,     posNothing,     posNothing,     posNothing,     posNothing,
                                      /*00*/   posNothing,   7  | posLeft,   6  | posLeft,   5  | posLeft,   4  | posLeft    }},
         //=====================================================================================================================
+        // Insert new ESP layouts below this one!
+        // Feel free to use any of the above as a template.
+        // ***
+
+
+        //=====================================================================================================================
         // Espressif ESP32 S3 WROOM-1 DevkitC-1 N16R8
         // Board Type: ESP32-S3
         {"esp32-s3-devkitc-1",      {/*00*/   posNothing,   19 | posLeft,   18 | posLeft,     posNothing,   19 | posRight,
@@ -723,7 +732,7 @@ public:
                                      /*40*/ 20 | posLeft,   19 | posRight,  20 | posRight,    posNothing,     posNothing,
                                      /*45*/   posNothing,     posNothing,     posNothing,     posNothing                    }},
         //=====================================================================================================================
-        // Insert new layouts below this one!
+        // Insert new ESP layouts below this one!
         // Feel free to use any of the above as a template.
         // ***
 
@@ -732,11 +741,11 @@ public:
         // Generic (RP2040/2350) layout
         // Just reveal all pins; user assumes full responsibility if something goes wrong here
         {"generic",                 {/*00*/ 1  | posLeft,   2  | posLeft,   3  | posLeft,   4  | posLeft,   5  | posLeft,
-                                     /*00*/ 6  | posLeft,   7  | posLeft,   8  | posLeft,   9  | posLeft,   10 | posLeft,
-                                     /*00*/ 11 | posLeft,   12 | posLeft,   13 | posLeft,   14 | posLeft,   15 | posLeft,
-                                     /*00*/ 16 | posLeft,   16 | posRight,  15 | posRight,  14 | posRight,  13 | posRight,
-                                     /*00*/ 12 | posRight,  11 | posRight,  10 | posRight,  9  | posRight,  8  | posRight,
-                                     /*00*/ 7  | posRight,  6  | posRight,  5  | posRight,  4  | posRight,  3  | posRight   }}
+                                     /*05*/ 6  | posLeft,   7  | posLeft,   8  | posLeft,   9  | posLeft,   10 | posLeft,
+                                     /*10*/ 11 | posLeft,   12 | posLeft,   13 | posLeft,   14 | posLeft,   15 | posLeft,
+                                     /*15*/ 16 | posLeft,   16 | posRight,  15 | posRight,  14 | posRight,  13 | posRight,
+                                     /*20*/ 12 | posRight,  11 | posRight,  10 | posRight,  9  | posRight,  8  | posRight,
+                                     /*25*/ 7  | posRight,  6  | posRight,  5  | posRight,  4  | posRight,  3  | posRight   }}
     };
 
     typedef struct {
