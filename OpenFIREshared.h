@@ -43,10 +43,16 @@
     #define OPENFIRE_BOARD "rpipico"
 #elifdef ARDUINO_RASPBERRY_PI_PICO_W
     #define OPENFIRE_BOARD "rpipicow"
+#elifdef ARDUINO_RASPBERRY_PI_PICO_2
+    #define OPENFIRE_BOARD "rpipico2"
+#elifdef ARDUINO_RASPBERRY_PI_PICO_2W
+    #define OPENFIRE_BOARD "rpipico2w"
 #elifdef ARDUINO_ESP32_S3_WROOM1_DevKitC_1_N16R8
     #define OPENFIRE_BOARD "esp32-s3-devkitc-1"
 #elifdef ARDUINO_WAVESHARE_ESP32_S3_PICO
     #define OPENFIRE_BOARD "waveshare-esp32-s3-pico"
+#elifdef ARDUINO_GENERIC_RP2350
+    #define OPENFIRE_BOARD "generic-rp2350"
 #else
     #define OPENFIRE_BOARD "generic"
 #endif // board
@@ -365,6 +371,7 @@ public:
                                      /*25*/ unavailable,    btnUnmapped,    btnUnmapped,    tempPin,        unavailable     }},
         //=====================================================================================================================
         // Raspberry Pi Pico W
+        // Board Type: RP2040
         // Notes: Raspberry Pi boards do not expose pins 23-25; pin 29/A3 is used for builtin chipset temp monitor
         {"rpipicow",                {/*00*/ btnGunA,        btnGunB,        btnGunC,        btnStart,       btnSelect,
                                      /*05*/ btnHome,        btnGunUp,       btnGunDown,     btnGunLeft,     btnGunRight,
@@ -372,6 +379,26 @@ public:
                                      /*15*/ btnTrigger,     solenoidPin,    rumblePin,      btnUnmapped,    btnUnmapped,
                                      /*20*/ camSDA,         camSCL,         btnUnmapped,    unavailable,    unavailable,
                                      /*25*/ unavailable,    analogY,        analogX,        tempPin,        unavailable     }},
+        //=====================================================================================================================
+        // Raspberry Pi Pico 2
+        // Board Type: RP2350A
+        // Notes: Pico 2 boards are pin-identical to Pico 1 boards
+        {"rpipico2",                {/*00*/ btnGunA,        btnGunB,        btnGunC,        btnStart,       btnSelect,
+                                     /*05*/ btnHome,        btnGunUp,       btnGunDown,     btnGunLeft,     btnGunRight,
+                                     /*10*/ ledR,           ledG,           ledB,           btnPump,        btnPedal,
+                                     /*15*/ btnTrigger,     solenoidPin,    rumblePin,      periphSDA,      periphSCL,
+                                     /*20*/ camSDA,         camSCL,         btnUnmapped,    unavailable,    unavailable,
+                                     /*25*/ unavailable,    btnUnmapped,    btnUnmapped,    tempPin,        unavailable     }},
+        //=====================================================================================================================
+        // Raspberry Pi Pico 2W
+        // Board Type: RP2350A
+        // Notes: Pico 2 boards are pin-identical to Pico 1 boards
+        {"rpipico2w",               {/*00*/ btnGunA,        btnGunB,        btnGunC,        btnStart,       btnSelect,
+                                     /*05*/ btnHome,        btnGunUp,       btnGunDown,     btnGunLeft,     btnGunRight,
+                                     /*10*/ ledR,           ledG,           ledB,           btnPump,        btnPedal,
+                                     /*15*/ btnTrigger,     solenoidPin,    rumblePin,      periphSDA,      periphSCL,
+                                     /*20*/ camSDA,         camSCL,         btnUnmapped,    unavailable,    unavailable,
+                                     /*25*/ unavailable,    btnUnmapped,    btnUnmapped,    tempPin,        unavailable     }},
         //=====================================================================================================================
         // Adafruit ItsyBitsy RP2040
         // Board Type: RP2040
@@ -447,6 +474,8 @@ public:
     const std::map<std::string, const char *> boardNames = {
         {"rpipico",                 "Raspberry Pi Pico (RP2040)"},
         {"rpipicow",                "Raspberry Pi Pico W (RP2040)"},
+        {"rpipico2",                "Raspberry Pi Pico 2 (RP2350)"},
+        {"rpipico2w",               "Raspberry Pi Pico 2W (RP2350)"},
         {"adafruitItsyRP2040",      "Adafruit ItsyBitsy RP2040"},
         {"adafruitKB2040",          "Adafruit Keeboar KB2040"},
         {"arduinoNanoRP2040",       "Arduino Nano Connect RP2040"},
@@ -454,7 +483,8 @@ public:
         {"esp32-s3-devkitc-1",      "ESP32-S3 WROOM-1 DevkitC-1 (N16R8)"},
         {"waveshare-esp32-s3-pico", "Waveshare ESP32-S3-Pico"},
         // Add more here!
-        {"generic",             "Unknown RP2040 Board"}
+        {"generic-rp2350",          "Unknown RP2350 Board"},
+        {"generic",                 "Unknown RP2040 Board"}
     };
 
     /// @brief      Types of board architectures
@@ -540,8 +570,8 @@ public:
                                     /*40*/ pinAnyI2C | pinAnySPI,                   pinAnyI2C | pinAnySPI,                  pinAnyI2C | pinAnySPI,                  pinAnyI2C | pinAnySPI,                  pinAnyI2C | pinAnySPI,
                                     /*45*/ pinSystem,                               pinSystem,                              pinAnyI2C | pinAnySPI,                  pinAnyI2C | pinAnySPI                                                           }},
         //====================================================
-        // Board Overrides: Raspberry Pi Pico (Non-/W)
-        // Some pins that should have I2C or SPI functions apparently aren't allowed on rpipico(w)?
+        // Board Overrides: Raspberry Pi Pico (Non-/W, 1&2)
+        // Some pins that should have I2C or SPI functions apparently aren't allowed on rpipico[2](w)?
         {"rpipico",             {/*00*/ pinI2C0SDA | pinSPI0RX,     pinI2C0SCL | pinSPI0CSn,                pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,                 pinI2C0SDA | pinSPI0RX,
                                  /*05*/ pinI2C0SCL | pinSPI0CSn,    pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,                 pinI2C0SDA | pinSPI1RX,                 pinI2C0SCL | pinSPI1CSn,
                                  /*10*/ pinI2C1SDA | pinSPI1SCK,    pinI2C1SCL | pinSPI1TX,                 pinI2C0SDA | pinSPI1RX,                 pinI2C0SCL | pinSPI1CSn,                pinI2C1SDA | pinSPI1SCK,
@@ -549,6 +579,18 @@ public:
                                  /*20*/ pinI2C0SDA | pinSPI0RX,     pinI2C0SCL | pinSPI0CSn,                pinDigital,                             pinDigital,                             pinDigital,
                                  /*25*/ pinDigital,                 pinI2C1SDA | pinSPI1SCK | pinHasADC,    pinI2C1SCL | pinSPI1TX | pinHasADC,     pinSPI1RX  | pinHasADC,                 pinDigital                  }},
         {"rpipicow",            {/*00*/ pinI2C0SDA | pinSPI0RX,     pinI2C0SCL | pinSPI0CSn,                pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,                 pinI2C0SDA | pinSPI0RX,
+                                 /*05*/ pinI2C0SCL | pinSPI0CSn,    pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,                 pinI2C0SDA | pinSPI1RX,                 pinI2C0SCL | pinSPI1CSn,
+                                 /*10*/ pinI2C1SDA | pinSPI1SCK,    pinI2C1SCL | pinSPI1TX,                 pinI2C0SDA | pinSPI1RX,                 pinI2C0SCL | pinSPI1CSn,                pinI2C1SDA | pinSPI1SCK,
+                                 /*15*/ pinI2C1SCL | pinSPI1TX,     pinI2C0SDA | pinSPI0RX,                 pinI2C0SCL | pinSPI0CSn,                pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,
+                                 /*20*/ pinI2C0SDA | pinSPI0RX,     pinI2C0SCL | pinSPI0CSn,                pinDigital,                             pinDigital,                             pinDigital,
+                                 /*25*/ pinDigital,                 pinI2C1SDA | pinSPI1SCK | pinHasADC,    pinI2C1SCL | pinSPI1TX | pinHasADC,     pinSPI1RX  | pinHasADC,                 pinDigital                  }},
+        {"rpipico2",            {/*00*/ pinI2C0SDA | pinSPI0RX,     pinI2C0SCL | pinSPI0CSn,                pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,                 pinI2C0SDA | pinSPI0RX,
+                                 /*05*/ pinI2C0SCL | pinSPI0CSn,    pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,                 pinI2C0SDA | pinSPI1RX,                 pinI2C0SCL | pinSPI1CSn,
+                                 /*10*/ pinI2C1SDA | pinSPI1SCK,    pinI2C1SCL | pinSPI1TX,                 pinI2C0SDA | pinSPI1RX,                 pinI2C0SCL | pinSPI1CSn,                pinI2C1SDA | pinSPI1SCK,
+                                 /*15*/ pinI2C1SCL | pinSPI1TX,     pinI2C0SDA | pinSPI0RX,                 pinI2C0SCL | pinSPI0CSn,                pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,
+                                 /*20*/ pinI2C0SDA | pinSPI0RX,     pinI2C0SCL | pinSPI0CSn,                pinDigital,                             pinDigital,                             pinDigital,
+                                 /*25*/ pinDigital,                 pinI2C1SDA | pinSPI1SCK | pinHasADC,    pinI2C1SCL | pinSPI1TX | pinHasADC,     pinSPI1RX  | pinHasADC,                 pinDigital                  }},
+        {"rpipico2w",           {/*00*/ pinI2C0SDA | pinSPI0RX,     pinI2C0SCL | pinSPI0CSn,                pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,                 pinI2C0SDA | pinSPI0RX,
                                  /*05*/ pinI2C0SCL | pinSPI0CSn,    pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,                 pinI2C0SDA | pinSPI1RX,                 pinI2C0SCL | pinSPI1CSn,
                                  /*10*/ pinI2C1SDA | pinSPI1SCK,    pinI2C1SCL | pinSPI1TX,                 pinI2C0SDA | pinSPI1RX,                 pinI2C0SCL | pinSPI1CSn,                pinI2C1SDA | pinSPI1SCK,
                                  /*15*/ pinI2C1SCL | pinSPI1TX,     pinI2C0SDA | pinSPI0RX,                 pinI2C0SCL | pinSPI0CSn,                pinI2C1SDA | pinSPI0SCK,                pinI2C1SCL | pinSPI0TX,
@@ -587,6 +629,26 @@ public:
         // Board Type: RP2040
         // Notes: Raspberry Pi boards do not expose pins 23-25; pin 29/A3 is used for builtin chipset temp monitor
         {"rpipicow",                {/*00*/ 1  | posLeft,   2  | posLeft,   4  | posLeft,   5  | posLeft,   6  | posLeft,
+                                     /*05*/ 7  | posLeft,   9  | posLeft,   10 | posLeft,   11 | posLeft,   12 | posLeft,
+                                     /*10*/ 14 | posLeft,   15 | posLeft,   16 | posLeft,   17 | posLeft,   19 | posLeft,
+                                     /*15*/ 20 | posLeft,   20 | posRight,  19 | posRight,  17 | posRight,  16 | posRight,
+                                     /*20*/ 15 | posRight,  14 | posRight,  12 | posRight,    posNothing,     posNothing,
+                                     /*25*/   posNothing,   10 | posRight,  9  | posRight,  7  | posRight,    posNothing    }},
+        //=====================================================================================================================
+        // Raspberry Pi Pico 2: same as Pico 1
+        // Board Type: RP2350A
+        // Notes: Raspberry Pi boards do not expose pins 23-25; pin 29/A3 is used for builtin chipset temp monitor
+        {"rpipico2",                {/*00*/ 1  | posLeft,   2  | posLeft,   4  | posLeft,   5  | posLeft,   6  | posLeft,
+                                     /*05*/ 7  | posLeft,   9  | posLeft,   10 | posLeft,   11 | posLeft,   12 | posLeft,
+                                     /*10*/ 14 | posLeft,   15 | posLeft,   16 | posLeft,   17 | posLeft,   19 | posLeft,
+                                     /*15*/ 20 | posLeft,   20 | posRight,  19 | posRight,  17 | posRight,  16 | posRight,
+                                     /*20*/ 15 | posRight,  14 | posRight,  12 | posRight,    posNothing,     posNothing,
+                                     /*25*/   posNothing,   10 | posRight,  9  | posRight,  7  | posRight,    posNothing    }},
+        //=====================================================================================================================
+        // Raspberry Pi Pico 2W: same as non-W Pico 1&2.
+        // Board Type: RP2350A
+        // Notes: Raspberry Pi boards do not expose pins 23-25; pin 29/A3 is used for builtin chipset temp monitor
+        {"rpipico2w",               {/*00*/ 1  | posLeft,   2  | posLeft,   4  | posLeft,   5  | posLeft,   6  | posLeft,
                                      /*05*/ 7  | posLeft,   9  | posLeft,   10 | posLeft,   11 | posLeft,   12 | posLeft,
                                      /*10*/ 14 | posLeft,   15 | posLeft,   16 | posLeft,   17 | posLeft,   19 | posLeft,
                                      /*15*/ 20 | posLeft,   20 | posRight,  19 | posRight,  17 | posRight,  16 | posRight,
@@ -667,7 +729,7 @@ public:
 
 
         //=====================================================================================================================
-        // Generic (RP2040/2350A) layout
+        // Generic (RP2040/2350) layout
         // Just reveal all pins; user assumes full responsibility if something goes wrong here
         {"generic",                 {/*00*/ 1  | posLeft,   2  | posLeft,   3  | posLeft,   4  | posLeft,   5  | posLeft,
                                      /*00*/ 6  | posLeft,   7  | posLeft,   8  | posLeft,   9  | posLeft,   10 | posLeft,
