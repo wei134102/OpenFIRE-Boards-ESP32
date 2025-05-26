@@ -103,7 +103,7 @@ public:
 
     // Note: names should be written in plain english,
     // as these name strings are shared with Apps
-    const std::unordered_map<std::string, int> boardInputs_Strings = {
+    const std::unordered_map<std::string_view, int> boardInputs_Strings = {
         {"Unmapped",            btnUnmapped     },
         {"Trigger",             btnTrigger      },
         {"Button A",            btnGunA         },
@@ -145,7 +145,7 @@ public:
     OF_Const() {
 #ifdef OF_APP // generate strings list for the available board inputs
         for(auto &func : boardInputs_Strings)
-            boardInputs_sortedStr[func.second+1] = (char*)func.first.c_str();
+            boardInputs_sortedStr[func.second+1] = (char*)func.first.data();
 #endif // OF_APP
     }
 
@@ -167,7 +167,7 @@ public:
         boolTypesCount
     } boolTypes_e;
 
-    const std::unordered_map<std::string, int> boolTypes_Strings = {
+    const std::unordered_map<std::string_view, int> boolTypes_Strings = {
         {"CustomPins",          customPins          },
         {"Rumble",              rumble              },
         {"Solenoid",            solenoid            },
@@ -202,7 +202,7 @@ public:
         settingsTypesCount
     } settingsTypes_e;
 
-    const std::unordered_map<std::string, int> settingsTypes_Strings = {
+    const std::unordered_map<std::string_view, int> settingsTypes_Strings = {
         {"RumbPwr",             rumbleStrength      },
         {"RumbTime",            rumbleInterval      },
         {"SolOn",               solenoidOnLength    },
@@ -247,7 +247,7 @@ public:
         profCurrent = 0xFD,
     } profSyncTypes_e;
 
-    const std::unordered_map<std::string, int> profSettingTypes_Strings = {
+    const std::unordered_map<std::string_view, int> profSettingTypes_Strings = {
         {"TopOffset",   profTopOffset       },
         {"BtmOffset",   profBottomOffset    },
         {"LftOffset",   profLeftOffset      },
@@ -358,7 +358,7 @@ public:
     /// @brief      Map of default pin mappings for each supported board
     /// @details    Key = board, int array maps to RP2040 GPIO where each value is a FW function (or unmapped).
     /// @note       /*xx*/ indicates the number of the GPIO, e.g. /*02*/ for GPIO-02
-    const std::unordered_map<std::string, std::vector<int>> boardsPresetsMap = {
+    const std::unordered_map<std::string_view, std::vector<int>> boardsPresetsMap = {
         //=====================================================================================================================
         // Raspberry Pi Pico
         // Board Type: RP2040
@@ -474,7 +474,7 @@ public:
 // Only needed for the Desktop App, don't build for microcontroller firmware!
 #ifdef OF_APP
 
-    const std::map<std::string, const char *> boardNames = {
+    const std::map<std::string_view, const char *> boardNames = {
         {"rpipico",                 "Raspberry Pi Pico (RP2040)"},
         {"rpipicow",                "Raspberry Pi Pico W (RP2040)"},
         {"rpipico2",                "Raspberry Pi Pico 2 (RP2350)"},
@@ -541,7 +541,7 @@ public:
     /// @brief      Map of capabilities of each pin for a board type
     /// @details    Dictates what types of functions a pin can be mapped to, based on its capabilities
     ///             This applies to ALL boards using a specific architecture.
-    const std::unordered_map<std::string, std::vector<int>> mcuCapableMaps = {
+    const std::unordered_map<std::string_view, std::vector<int>> mcuCapableMaps = {
         //====================================================
         // Base Microcontroller: RP2040 & RP235X(A|B)
         // GPIO: 30(RP2040/RP2350A) / 48(RP2350B)
@@ -616,7 +616,7 @@ public:
     ///             Unexposed pins should use only posNothing (0).
     ///             (Yep, bitpacking! Three least significant bits of the second byte determine left/right/under position)
     ///             (If anyone is aware of a better way of doing this, please let me know/send a PR!)
-    const std::unordered_map<std::string, std::vector<unsigned int>> boardsBoxPositions = {
+    const std::unordered_map<std::string_view, std::vector<unsigned int>> boardsBoxPositions = {
         //=====================================================================================================================
         // Raspberry Pi Pico: 15 pins left, rest of the pins right. Mostly linear order save for the reserved pins.
         // Board Type: RP2040
@@ -755,7 +755,7 @@ public:
 
     /// @brief      MultiMap of alternative pin mappings for supported boards to show in the application.
     /// @details    Key = board (one board can be multiple), string literal label, int array maps to RP2040 GPIO where each value is a FW function (or unmapped).
-    const std::unordered_multimap<std::string, boardAltPresetsMap_t> boardsAltPresets = {
+    const std::unordered_multimap<std::string_view, boardAltPresetsMap_t> boardsAltPresets = {
         //=====================================================================================================
         // Raspberry Pi Pico Presets (currently a test)
         // Notes: rpi boards do not expose pins 23-25; pin 29/A3 is used for builtin chipset temp monitor
