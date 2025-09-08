@@ -710,7 +710,7 @@ public:
         // Board Type: ESP32-S3
         {"esp32-s3-devkitc-1",      {/*00*/   posNothing,   19 | posLeft,   18 | posLeft,     posNothing,   19 | posRight,
                                      /*05*/ 18 | posRight,  17 | posRight,    posNothing,   11 | posRight,  8  | posRight,
-                                     /*10*/   posNothing,     posNothing,     posNothing,     posNothing,     posNothing,
+                                     /*10*/ 7  | posRight,  6  | posRight,  5  | posRight,     posNothing,     posNothing,
                                      /*15*/ 15 | posRight,  14 | posRight,  13 | posRight,  12 | posRight,    posNothing,
                                      /*20*/   posNothing,   5  | posLeft,     posNothing,     posNothing,     posNothing,
                                      /*25*/   posNothing,     posNothing,     posNothing,     posNothing,     posNothing,
