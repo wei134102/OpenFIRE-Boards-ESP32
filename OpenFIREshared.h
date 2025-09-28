@@ -163,7 +163,8 @@ public:
         invertStaticPixels,
         i2cOLED,
         i2cOLEDaltAddr,
-        // Add here
+        analogOutputMode,    // Add for saving GUN input mode
+        misterMode,          // Add for saving MiSTer optimized mode
         boolTypesCount
     } boolTypes_e;
 
@@ -180,6 +181,8 @@ public:
         {"InvertStaticPixels",  invertStaticPixels  },
         {"I2COLEDEnabled",      i2cOLED             },
         {"I2COLEDAltAddr",      i2cOLEDaltAddr      },
+        {"AnalogOutputMode",    analogOutputMode    },
+        {"MisterMode",          misterMode          },
     };
 
     // Variable settings indices
