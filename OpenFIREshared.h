@@ -446,7 +446,7 @@ public:
         // Board Type: ESP32
         {"esp32-s3-devkitc-1",      {/*00*/ unavailable,    btnTrigger,     btnGunRight,    btnUnmapped,    analogX,
                                      /*05*/ analogY,        tempPin,        btnUnmapped,    camSDA,         camSCL,
-                                     /*10*/ btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
+                                     /*10*/ wiiClockGen,    btnUnmapped,    btnUnmapped,    btnUnmapped,    btnUnmapped,
                                      /*15*/ periphSCL,      rumblePin,      solenoidPin,    periphSDA,      unavailable,
                                      /*20*/ unavailable,    btnGunC,        unavailable,    unavailable,    unavailable,
                                      /*25*/ unavailable,    unavailable,    unavailable,    unavailable,    unavailable,
@@ -459,7 +459,7 @@ public:
         // Board Type: ESP32
         {"waveshare-esp32-s3-pico", {/*00*/ unavailable,    btnUnmapped,    btnUnmapped,    unavailable,    camSDA,
                                      /*05*/ camSCL,         btnUnmapped,    analogY,        analogX,        tempPin,
-                                     /*10*/ btnUnmapped,    btnGunA,        btnGunB,        btnGunC,        btnStart,
+                                     /*10*/ wiiClockGen,    btnGunA,        btnGunB,        btnGunC,        btnStart,
                                      /*15*/ btnSelect,      btnHome,        btnGunUp,       btnGunDown,     unavailable,
                                      /*20*/ unavailable,    neoPixel,       unavailable,    unavailable,    unavailable,
                                      /*25*/ unavailable,    unavailable,    unavailable,    unavailable,    unavailable,
