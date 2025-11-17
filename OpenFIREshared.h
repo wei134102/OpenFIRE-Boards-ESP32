@@ -458,7 +458,7 @@ public:
         // Waveshare ESP32 S3 Pico
         // Board Type: ESP32
         {"waveshare-esp32-s3-pico", {/*00*/ unavailable,    btnUnmapped,    btnUnmapped,    unavailable,    camSDA,
-                                     /*05*/ camSCL,         btnUnmapped,    analogY,        analogX,        tempPin,
+                                     /*05*/ camSCL,         btnPedal2,      analogY,        analogX,        tempPin,
                                      /*10*/ btnUnmapped,    btnGunA,        btnGunB,        btnGunC,        btnStart,
                                      /*15*/ btnSelect,      btnHome,        btnGunUp,       btnGunDown,     unavailable,
                                      /*20*/ unavailable,    neoPixel,       unavailable,    unavailable,    unavailable,
