@@ -201,7 +201,7 @@ public:
         tempWarning,
         tempShutdown,
         analogMode,
-        // Add here
+        gunId,//add for display gunID
         settingsTypesCount
     } settingsTypes_e;
 
@@ -220,6 +220,7 @@ public:
         {"TempWarning",         tempWarning         },
         {"TempDanger",          tempShutdown        },
         {"AnalogMode",          analogMode          },
+        {"GunId",               gunId               },
     };
 
     enum {
