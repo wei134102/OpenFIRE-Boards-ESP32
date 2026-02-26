@@ -51,6 +51,8 @@
     #define OPENFIRE_BOARD "esp32-s3-devkitc-1"
 #elifdef ARDUINO_WAVESHARE_ESP32_S3_PICO
     #define OPENFIRE_BOARD "waveshare-esp32-s3-pico"
+#elifdef ARDUINO_ESP32_S3_SUPERMINI
+    #define OPENFIRE_BOARD "esp32-s3-supermini"
 #elifdef ARDUINO_GENERIC_RP2350
     #define OPENFIRE_BOARD "generic-rp2350"
 #else
@@ -472,6 +474,21 @@ public:
                                      /*40*/ btnTrigger,     rumblePin,      solenoidPin,    unavailable,    unavailable,
                                      /*45*/ unavailable,    unavailable,    unavailable,    unavailable                     }},
         //=====================================================================================================================
+        // ESP32-S3 SuperMini (minimal pinout header)
+        // Board Type: ESP32
+        // Notes: Only GPIO1-13 are brought out (plus TX/RX and power). Rest are left unavailable.
+        //        This preset is a reasonable default; users can override via Custom Pins in the App.
+        {"esp32-s3-supermini",      {/*00*/ unavailable,    btnTrigger,     btnGunA,        btnGunB,        btnGunC,
+                                     /*05*/ btnStart,       btnSelect,      btnGunUp,       btnGunDown,     btnGunLeft,
+                                     /*10*/ btnGunRight,    rumblePin,      solenoidPin,    neoPixel,       camSDA,
+                                     /*15*/ camSCL,         periphSDA,      periphSCL,      tempPin,        btnPedal,
+                                     /*20*/ btnPedal2,      btnHome,        unavailable,    unavailable,    unavailable,
+                                     /*25*/ unavailable,    unavailable,    unavailable,    unavailable,    unavailable,
+                                     /*30*/ unavailable,    unavailable,    unavailable,    unavailable,    unavailable,
+                                     /*35*/ unavailable,    unavailable,    unavailable,    unavailable,    unavailable,
+                                     /*40*/ unavailable,    unavailable,    unavailable,    unavailable,    unavailable,
+                                     /*45*/ unavailable,    unavailable,    unavailable,    unavailable                     }},
+        //=====================================================================================================================
         /* more ESP boards should be added here */
     };
 
@@ -491,6 +508,7 @@ public:
         {"waveshareZero",           "Waveshare Zero RP2040"},
         {"esp32-s3-devkitc-1",      "ESP32-S3 WROOM-1 DevkitC-1 (N16R8)"},
         {"waveshare-esp32-s3-pico", "Waveshare ESP32-S3-Pico"},
+        {"esp32-s3-supermini",      "ESP32-S3 SuperMini"},
         // Add more here!
         {"generic-rp2350",          "Unknown RP2350 Board"},
         {"generic",                 "Unknown RP2040 Board"}
@@ -736,6 +754,19 @@ public:
                                      /*30*/   posNothing,     posNothing,     posNothing,   11 | posLeft,   12 | posLeft,
                                      /*35*/ 14 | posLeft,   15 | posLeft,   16 | posLeft,   17 | posLeft,   19 | posLeft,
                                      /*40*/ 20 | posLeft,   19 | posRight,  20 | posRight,    posNothing,     posNothing,
+                                     /*45*/   posNothing,     posNothing,     posNothing,     posNothing                    }},
+        //=====================================================================================================================
+        // ESP32-S3 SuperMini (minimal header layout)
+        // Board Type: ESP32-S3
+        {"esp32-s3-supermini",      {/*00*/   posNothing,   3  | posLeft,   4  | posLeft,   5  | posLeft,   6  | posLeft,
+                                     /*05*/ 7  | posLeft,   8  | posLeft,   9  | posLeft,  10  | posLeft,  11  | posLeft,
+                                     /*10*/ 12 | posLeft,  13  | posLeft,  14  | posLeft,  15  | posLeft,  16  | posLeft,
+                                     /*15*/ 17 | posLeft,  18  | posLeft,     posNothing,     posNothing,     posNothing,
+                                     /*20*/   posNothing,     posNothing,     posNothing,     posNothing,     posNothing,
+                                     /*25*/   posNothing,     posNothing,     posNothing,     posNothing,     posNothing,
+                                     /*30*/   posNothing,     posNothing,     posNothing,     posNothing,     posNothing,
+                                     /*35*/   posNothing,     posNothing,     posNothing,     posNothing,     posNothing,
+                                     /*40*/   posNothing,     posNothing,     posNothing,     posNothing,     posNothing,
                                      /*45*/   posNothing,     posNothing,     posNothing,     posNothing                    }},
         //=====================================================================================================================
         // Insert new ESP layouts below this one!
