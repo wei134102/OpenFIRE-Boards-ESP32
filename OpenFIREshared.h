@@ -204,6 +204,7 @@ public:
         tempShutdown,
         analogMode,
         gunId,//add for display gunID
+        analogDeadzone,   // 新增：模拟摇杆死区（百分比，0–30）
         settingsTypesCount
     } settingsTypes_e;
 
@@ -223,6 +224,7 @@ public:
         {"TempDanger",          tempShutdown        },
         {"AnalogMode",          analogMode          },
         {"GunId",               gunId               },
+        {"AnalogDeadzone",      analogDeadzone      },//新增
     };
 
     enum {
