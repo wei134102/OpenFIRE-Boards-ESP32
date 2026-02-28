@@ -204,8 +204,16 @@ public:
         tempShutdown,
         analogMode,
         gunId,//add for display gunID
-        analogDeadzone,   // 新增：模拟摇杆死区（百分比，0–30）
-        axisUnsigned,     // 轴输出为无符号模式（Joypad-OS 兼容开关）
+        analogDeadzone,        // 模拟摇杆死区（百分比，0–30）
+        axisUnsigned,          // 轴输出为无符号模式（Joypad-OS 兼容开关）
+        analogCenterOffsetX,   // 左摇杆 X 轴中心偏移 (ADC 单位, 可正可负)
+        analogCenterOffsetY,   // 左摇杆 Y 轴中心偏移
+        // 模拟摇杆“画圈校准（范围+中心）”数据（以应用中心偏移后的 ADC 空间保存）
+        analogCalMinX,         // 校准后 X 轴最小值（0..4095）
+        analogCalMaxX,         // 校准后 X 轴最大值（0..4095）
+        analogCalMinY,         // 校准后 Y 轴最小值（0..4095）
+        analogCalMaxY,         // 校准后 Y 轴最大值（0..4095）
+        analogCalValid,        // 0=未启用/无效，1=启用范围缩放
         settingsTypesCount
     } settingsTypes_e;
 
@@ -225,8 +233,15 @@ public:
         {"TempDanger",          tempShutdown        },
         {"AnalogMode",          analogMode          },
         {"GunId",               gunId               },
-        {"AnalogDeadzone",      analogDeadzone      },//新增
+        {"AnalogDeadzone",      analogDeadzone      },
         {"AxisUnsigned",        axisUnsigned        },
+        {"AnalogCenterX",       analogCenterOffsetX },
+        {"AnalogCenterY",       analogCenterOffsetY },
+        {"AnalogMinX",          analogCalMinX       },
+        {"AnalogMaxX",          analogCalMaxX       },
+        {"AnalogMinY",          analogCalMinY       },
+        {"AnalogMaxY",          analogCalMaxY       },
+        {"AnalogCalOK",         analogCalValid      },
     };
 
     enum {
