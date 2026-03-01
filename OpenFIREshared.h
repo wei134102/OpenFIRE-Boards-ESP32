@@ -214,6 +214,7 @@ public:
         analogCalMinY,         // 校准后 Y 轴最小值（0..4095）
         analogCalMaxY,         // 校准后 Y 轴最大值（0..4095）
         analogCalValid,        // 0=未启用/无效，1=启用范围缩放
+        analogKeysLayout,       // 0=方向键(Arrows), 1=WASD（仅 analogModeKeys 时有效）
         settingsTypesCount
     } settingsTypes_e;
 
@@ -242,6 +243,7 @@ public:
         {"AnalogMinY",          analogCalMinY       },
         {"AnalogMaxY",          analogCalMaxY       },
         {"AnalogCalOK",         analogCalValid      },
+        {"AnalogKeysLayout",    analogKeysLayout    },
     };
 
     enum {
@@ -249,6 +251,11 @@ public:
         analogModeDpad,
         analogModeKeys
     } analogModeSettings_e;
+
+    enum {
+        analogKeysLayoutArrows = 0,
+        analogKeysLayoutWASD   = 1
+    } analogKeysLayout_e;
 
     // Profile data type indices
     // this MUST match the order of ProfileData_s in (FW)OpenFIREprefs
