@@ -214,7 +214,9 @@ public:
         analogCalMinY,         // 校准后 Y 轴最小值（0..4095）
         analogCalMaxY,         // 校准后 Y 轴最大值（0..4095）
         analogCalValid,        // 0=未启用/无效，1=启用范围缩放
-        analogKeysLayout,       // 0=方向键(Arrows), 1=WASD（仅 analogModeKeys 时有效）
+        analogInvertX,         // 0=正常, 1=反转 X 轴
+        analogInvertY,         // 0=正常, 1=反转 Y 轴
+        analogKeysLayout,      // 0=方向键(Arrows), 1=WASD（仅 analogModeKeys 时有效）
         settingsTypesCount
     } settingsTypes_e;
 
@@ -243,6 +245,8 @@ public:
         {"AnalogMinY",          analogCalMinY       },
         {"AnalogMaxY",          analogCalMaxY       },
         {"AnalogCalOK",         analogCalValid      },
+        {"AnalogInvertX",       analogInvertX       },
+        {"AnalogInvertY",       analogInvertY       },
         {"AnalogKeysLayout",    analogKeysLayout    },
     };
 
