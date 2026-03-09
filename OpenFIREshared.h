@@ -217,6 +217,7 @@ public:
         analogInvertX,         // 0=正常, 1=反转 X 轴
         analogInvertY,         // 0=正常, 1=反转 Y 轴
         analogKeysLayout,      // 0=方向键(Arrows), 1=WASD（仅 analogModeKeys 时有效）
+        analogSwapSticks,      // GAMEPAD 模式：左右摇杆互换（红外定位 <-> 物理摇杆）        
         settingsTypesCount
     } settingsTypes_e;
 
@@ -248,6 +249,7 @@ public:
         {"AnalogInvertX",       analogInvertX       },
         {"AnalogInvertY",       analogInvertY       },
         {"AnalogKeysLayout",    analogKeysLayout    },
+        {"AnalogSwapSticks",    analogSwapSticks    },
     };
 
     enum {
