@@ -242,6 +242,20 @@ public:
         {"TempDanger",          tempShutdown        },
         {"AnalogMode",          analogMode          },
         {"GunId",               gunId               },
+        {"GunID",               gunId               },  // legacy alias (settings.conf / older builds)
+        {"AnalogDeadzone",      analogDeadzone      },
+        {"AxisUnsigned",        axisUnsigned        },
+        {"AnalogCenterOffsetX", analogCenterOffsetX },
+        {"AnalogCenterOffsetY", analogCenterOffsetY },
+        {"AnalogCalMinX",       analogCalMinX       },
+        {"AnalogCalMaxX",       analogCalMaxX       },
+        {"AnalogCalMinY",       analogCalMinY       },
+        {"AnalogCalMaxY",       analogCalMaxY       },
+        {"AnalogCalValid",      analogCalValid      },
+        {"AnalogInvertX",       analogInvertX       },
+        {"AnalogInvertY",       analogInvertY       },
+        {"AnalogKeysLayout",    analogKeysLayout    },
+        {"AnalogSwapSticks",    analogSwapSticks    },
     };
 
     enum {
